@@ -157,6 +157,25 @@
         text-decoration: underline;
         }
 
+    .home-avatar {
+    display: flex;
+    align-items: center;
+    }
+
+    .home-avatar img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    object-fit: cover;
+    cursor: pointer;
+    }
+
+    .home-avatar img:hover {
+    opacity: 0.85;
+    }
+
+
 
     /* Responsive */
     @media (max-width: 768px) {
@@ -194,7 +213,10 @@
 
     <!-- Top bar -->
     <div class="nav">
-      <div class="nav-left">home</div>
+        <a href="index.html" class="home-avatar">
+        <img src="/pic.jpg" alt="home">
+        </a>
+
 
         <div class="nav-center">
         <a href="blogs/blog.html">blogs</a>
@@ -211,7 +233,7 @@
     <!-- Center content -->
     <div class="content">
       <div class="name">MOHIT</div>
-      <div class="tagline">i like to code ig</div>
+      <div class="tagline">exploring vision models</div>
     </div>
 
     <!-- Footer -->
