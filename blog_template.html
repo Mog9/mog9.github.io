@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>web title</title>
+  <title>Distilling Knowledge</title>
 
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -196,6 +196,27 @@
     font-size: 12px;
     color: var(--muted);
     }
+
+    /* BACK LINK */
+    .back-container {
+    margin-top: 64px;
+    text-align: center;
+    }
+
+    .back-link {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    display: inline-block;
+    }
+
+    .back-link:hover {
+    background: var(--text);
+    color: var(--panel);
+    }
+
   </style>
 </head>
 
@@ -220,11 +241,11 @@
   <article class="article">
 
     <h1 class="article-title reveal" style="animation-delay: 0.2s;">
-      --TITLE--
+      Distilling Knowledge in a Neural Network
     </h1>
 
     <div class="article-meta reveal" style="animation-delay: 0.25s;">
-      --DATE--
+      19 Dec 2025
     </div>
 
     <div class="reveal" style="animation-delay: 0.3s;">
@@ -276,6 +297,12 @@
       <p>
         The rest of the article continues here.
       </p>
+    </div>
+
+    <div class="back-container reveal" style="animation-delay: 0.4s;">
+    <a href="blog.html" class="back-link">
+        ← back to blogs
+    </a>
     </div>
 
   </article>
