@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Distilling Knowledge</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #1e1e26;
+      --panel: #1b1b22;
+      --text: #ffb86c;
+      --muted: #c9a26b;
+      --border: #ffb86c;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f4f4;
+      --panel: #ffffff;
+      --text: #1e1e26;
+      --muted: #555555;
+      --border: #1e1e26;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: "JetBrains Mono", monospace;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* FRAME */
+    .frame {
+      width: 94%;
+      max-width: 1200px;
+      min-height: 90vh;
+      border: 2px solid var(--border);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .home-avatar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      cursor: pointer;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .theme-toggle:hover {
+      background: var(--text);
+      color: var(--panel);
+    }
+
+    /* ARTICLE LAYOUT */
+    .article {
+      margin: 40px auto;
+      width: 100%;
+      max-width: 720px; /* reading width */
+    }
+
+    .article-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .article-meta {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    /* TYPOGRAPHY */
+    .article p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .article h2 {
+      font-size: 22px;
+      margin: 48px 0 16px;
+    }
+
+    .article h3 {
+      font-size: 18px;
+      margin: 32px 0 12px;
+    }
+
+    .article code {
+      background: rgba(255, 184, 108, 0.12);
+      padding: 2px 6px;
+      font-size: 14px;
+    }
+
+    .article pre {
+      background: rgba(255, 184, 108, 0.08);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 24px 0;
+    }
+
+    .article pre code {
+      background: none;
+      padding: 0;
+    }
+
+    /* ANIMATIONS */
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: revealUp 0.6s ease-out forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.25s ease-out;
+    }
+
+    .toggle-animate {
+      animation: togglePulse 0.2s ease-out;
+    }
+
+    @keyframes togglePulse {
+      50% {
+        transform: scale(0.96);
+        opacity: 0.8;
+      }
+    }
+
+    figure {
+    margin: 32px 0;
+    text-align: center;
+    }
+
+    .figure img {
+    max-width: 100%;
+    border: 1px solid var(--border);
+    }
+
+    /* Size variants */
+    .figure.small img {
+    max-width: 360px;
+    }
+
+    .figure.medium img {
+    max-width: 520px;
+    }
+
+    .figure.large img {
+    max-width: 720px;
+    }
+
+    /* Caption */
+    .figure figcaption {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    }
+
+    /* BACK LINK */
+    .back-container {
+    margin-top: 64px;
+    text-align: center;
+    }
+
+    .back-link {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    display: inline-block;
+    }
+
+    .back-link:hover {
+    background: var(--text);
+    color: var(--panel);
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="frame">
+
+  <!-- NAV -->
+  <div class="nav">
+    <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
+      <img src="/pic.jpg" alt="home">
+    </a>
+
+    <div></div>
+
+    <div class="reveal" style="animation-delay: 0.15s;">
+      <button class="theme-toggle" onclick="toggleTheme()">dark</button>
+    </div>
+  </div>
+
+
+
+
+
+
+  <!-- ARTICLE -->
+  <article class="article">
+
+    <h1 class="article-title reveal" style="animation-delay: 0.2s;">
+      Distilling the Knowledge in a Neural Network
+    </h1>
+
+    <div class="article-meta reveal" style="animation-delay: 0.25s;">
+      19 Dec 2025
+    </div>
+
+    <div class="reveal" style="animation-delay: 0.3s;">
+      <p>
+      Knowledge distillation is one of those ideas in machine learning that sounds simple, 
+      but completely changes how you think about supervision. Instead of training models only on hard labels,
+      it asks a different question: <i>what if we train models to copy how another model thinks?</i> In this blog, 
+      I walk through implementing the distillation paper end to end and what actually happens when a student model
+      learns purely from a teacher’s outputs.
+      </p>
+
+      <p>
+        Knowledge distillation was introduced as a way to transfer information from one neural network to another without copying weights or architectures. 
+        Instead of treating supervision as a fixed set of labels, it reframes learning as imitation: a student model learns by matching the output behavior of a teacher model that already generalizes well. 
+        This idea has since become a core technique for model compression and efficient deployment.
+      </p>
+
+      <figure class="figure small">
+      <img src="pic1.jpg" alt="flow">
+       <figcaption>
+          Figure 1: Example of Distilled Models
+        </figcaption>
+       </figure>
+        
+
+      <p>
+      In this implementation, The teacher model is trained exactly the way most image classifiers are trained: it sees an image, compares 
+      its prediction with the ground-truth label, 
+      and updates its weights to reduce classification error. 
+      Over time, it learns useful visual features and class boundaries, 
+      eventually reaching around 87% validation accuracy on CIFAR-10. 
+      At this point, the teacher has learned a reasonable way to generalize from the data.
+      </p>
+
+      <p>
+      Once training is complete, the teacher is frozen and no longer updated. This step is important because it turns the teacher into a stable reference point. 
+      Instead of continuously changing during training, the teacher provides consistent outputs for every input image, 
+      allowing the student to learn a fixed notion of “how to think” about the task rather than chasing a moving target.
+      </p>
+
+      <p>
+      Crucially, the teacher does not supervise the student using hard class labels. Instead, it provides its raw outputs (logits), which are later softened using temperature-scaled softmax.
+      These softened outputs encode relationships between classes <br>
+      for example, how similar a “cat” image is to “dog” versus “airplane”, and this structure becomes the knowledge that is distilled into the student model.
+      </p>
+      
+      <figure class="figure small">
+        <img src="pic2.png" alt="dog and cat distil">
+        <figcaption>
+            Figure 2: Knowledge distillation illustrated with a dog–cat example. 
+            A pretrained teacher provides soft labels that encode uncertainty and similarity between classes, 
+            guiding the student beyond binary right-or-wrong supervision.
+        </figcaption>
+      </figure>
+      
+      <p>
+      The student model’s task is fundamentally different from the teacher’s. Instead of learning from ground-truth labels, the student learns purely by imitation. 
+      For every input image, it tries to produce output distributions that match those of the frozen teacher, effectively learning the teacher’s way of generalizing rather 
+      than rediscovering the task from scratch.
+      </p>
+
+      <p>
+      To make this imitation meaningful, the teacher’s logits are passed through a softmax with temperature. Increasing the temperature smooths the output distribution,
+       preventing it from collapsing into a single dominant class. This exposes information about class similarities and uncertainty <br> 
+      for example, whether an image of a cat is closer to a dog than to a truck — which would be completely lost with hard labels.
+      </p>
+      
+      <figure class="figure small">
+        <img src="pic3.png" alt="paper equation softmax w/temp">
+        <figcaption>
+          Figure 3: Research Paper Equation for Softmax with Temperature
+        </figcaption>
+        </figure>
+        
+        <p>
+          The student is trained by minimizing the difference between its output distribution and the teacher’s softened output using a KL-divergence loss. Importantly, 
+          during this entire process <b>the student never sees CIFAR-10 labels.</b> The only supervision comes from the teacher’s behavior, 
+          yet the student still converges quickly, with distillation loss dropping steadily and validation accuracy reaching around 85–86% within just 10 epochs.
+        </p>
+        
+        <figure class="figure small">
+          <img src="pic4.png" alt="student output">
+          <figcaption>
+            Figure 4: Student Model Output
+          </figcaption>
+          </figure>
+      
+      <p>
+        What’s striking here is not just the final accuracy, but how fast the student learns. Compared to standard supervised training,
+         the gradients provided by the teacher’s soft outputs are denser and more informative, 
+        allowing the student to pick up useful structure early on. This is the core advantage of knowledge distillation: 
+        the student is not just told what is right or wrong, but is guided toward making the right kinds of mistakes.
+      </p>
+
+      <p>
+        In practice, this is exactly how many machine learning systems are deployed. Large models are trained offline where compute is cheap and time is not critical,
+        and their knowledge is then distilled into smaller models that are fast enough for production. These distilled models are 
+        easier to deploy on web servers, mobile devices, or edge hardware, while still retaining most of the performance of the original model.
+      </p>
+      
+      <p>
+        What this experiment really shows is that much of what we call “learning” in neural networks is already encoded in the behavior of a
+         trained model. Labels are just one way to guide learning, but they are not the only one, and often not the richest. By distilling knowledge
+          from a teacher into a student, we shift the focus from memorizing answers to inheriting reasoning patterns, which is why this idea continues to sit at the
+           core of modern, efficient machine learning systems.
+      </p>
+    </div>
+
+    
+    <div class="back-container reveal" style="animation-delay: 0.4s;">
+    <a href="/blogs/blog.html" class="back-link">
+        ← back to blogs
+    </a>
+    </div>
+
+  </article>
+
+</div>
+
+<script>
+  function toggleTheme() {
+    const body = document.body;
+    const btn = document.querySelector(".theme-toggle");
+
+    btn.classList.remove("toggle-animate");
+    void btn.offsetWidth;
+    btn.classList.add("toggle-animate");
+
+    if (body.getAttribute("data-theme") === "light") {
+      body.removeAttribute("data-theme");
+      btn.textContent = "dark";
+    } else {
+      body.setAttribute("data-theme", "light");
+      btn.textContent = "light";
+    }
+  }
+
+  document.querySelectorAll("a").forEach(link => {
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#")) return;
+
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      document.body.classList.add("fade-out");
+
+      setTimeout(() => {
+        window.location.href = href;
+      }, 200);
+    });
+    window.addEventListener("pageshow", function (event) {
+    document.body.classList.remove("fade-out");
+  });
+  });
+</script>
+
+</body>
+</html>
