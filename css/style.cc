@@ -7,7 +7,7 @@
 }
 
 :root {
-    --bg-color: #1a1a1a;
+    --bg-color: #0a0a0a;
     --terminal-orange: #ff9a56;
     --border-color: #ff8566;
     --text-color: #ff9a56;
@@ -23,7 +23,6 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    overflow-x: hidden;
 }
 
 .container {
@@ -35,21 +34,8 @@ body {
     border: 3px solid var(--border-color);
     border-radius: 15px;
     padding: 40px;
-    box-shadow: 0 0 30px rgba(255, 154, 86, 0.3);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-/* Terminal border animation */
-.terminal-border {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 15px;
-    pointer-events: none;
+    box-shadow: 0 0 30px rgba(255, 133, 102, 0.4), inset 0 0 50px rgba(255, 154, 86, 0.05);
+    background-color: rgba(10, 10, 10, 0.95);
 }
 
 /* Top Left - Profile Picture */
@@ -57,6 +43,7 @@ body {
     position: absolute;
     top: 30px;
     left: 30px;
+    z-index: 10;
 }
 
 .pfp-link {
@@ -70,14 +57,14 @@ body {
     border-radius: 50%;
     border: 3px solid var(--border-color);
     overflow: hidden;
-    background-color: #2a2a2a;
+    background-color: #1a1a1a;
     transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(255, 154, 86, 0.4);
+    box-shadow: 0 0 15px rgba(255, 154, 86, 0.5);
 }
 
 .pfp-circle:hover {
     border-color: var(--hover-color);
-    box-shadow: 0 0 25px rgba(255, 154, 86, 0.6);
+    box-shadow: 0 0 25px rgba(255, 154, 86, 0.7);
     transform: scale(1.05);
 }
 
@@ -97,6 +84,7 @@ body {
     gap: 10px;
     font-size: 18px;
     font-weight: bold;
+    z-index: 10;
 }
 
 .top-right a {
@@ -119,7 +107,7 @@ body {
 
 .top-right a:hover {
     color: var(--hover-color);
-    text-shadow: 0 0 10px rgba(255, 154, 86, 0.5);
+    text-shadow: 0 0 10px rgba(255, 154, 86, 0.8);
 }
 
 .top-right a:hover::after {
@@ -133,11 +121,10 @@ body {
 
 /* Center Content */
 .center-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
 }
 
@@ -146,7 +133,7 @@ body {
     font-family: 'VT323', monospace;
     letter-spacing: 8px;
     color: var(--text-color);
-    text-shadow: 0 0 20px rgba(255, 154, 86, 0.5);
+    text-shadow: 0 0 20px rgba(255, 154, 86, 0.6), 0 0 40px rgba(255, 154, 86, 0.3);
     animation: glow 2s ease-in-out infinite alternate;
     margin-bottom: 20px;
 }
@@ -160,19 +147,19 @@ body {
 
 @keyframes glow {
     from {
-        text-shadow: 0 0 20px rgba(255, 154, 86, 0.5);
+        text-shadow: 0 0 20px rgba(255, 154, 86, 0.6), 0 0 40px rgba(255, 154, 86, 0.3);
     }
     to {
-        text-shadow: 0 0 30px rgba(255, 154, 86, 0.8);
+        text-shadow: 0 0 30px rgba(255, 154, 86, 0.9), 0 0 50px rgba(255, 154, 86, 0.5);
     }
 }
 
 /* Bottom Center - Social Links */
 .bottom-center {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 20px;
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .social-links {
@@ -199,20 +186,23 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 12px;
     transition: all 0.3s ease;
     background-color: rgba(255, 154, 86, 0.1);
 }
 
 .social-icon svg {
-    width: 100%;
-    height: 100%;
+    width: 26px;
+    height: 26px;
+    color: var(--text-color);
+    fill: var(--text-color);
 }
 
 .social-item span {
     font-size: 16px;
     font-weight: bold;
     letter-spacing: 1px;
+    color: var(--text-color);
 }
 
 .social-item:hover {
@@ -223,7 +213,12 @@ body {
 .social-item:hover .social-icon {
     border-color: var(--hover-color);
     background-color: rgba(255, 154, 86, 0.2);
-    box-shadow: 0 0 20px rgba(255, 154, 86, 0.4);
+    box-shadow: 0 0 20px rgba(255, 154, 86, 0.5);
+}
+
+.social-item:hover .social-icon svg {
+    color: var(--hover-color);
+    fill: var(--hover-color);
 }
 
 /* Page Content Styles (for blog, project, etc. pages) */
@@ -245,13 +240,14 @@ body {
     font-family: 'VT323', monospace;
     letter-spacing: 4px;
     color: var(--text-color);
-    text-shadow: 0 0 15px rgba(255, 154, 86, 0.4);
+    text-shadow: 0 0 15px rgba(255, 154, 86, 0.5);
     margin-bottom: 15px;
 }
 
 .page-header p {
     font-size: 18px;
     opacity: 0.8;
+    color: var(--text-color);
 }
 
 .back-link {
@@ -290,6 +286,7 @@ body {
     line-height: 1.8;
     font-size: 16px;
     opacity: 0.9;
+    color: var(--text-color);
 }
 
 /* Responsive Design */
@@ -311,13 +308,28 @@ body {
         min-height: 100vh;
     }
     
+    .top-left {
+        top: 20px;
+        left: 20px;
+    }
+    
     .top-right {
-        position: static;
+        position: relative;
+        top: auto;
+        right: auto;
         width: 100%;
         justify-content: center;
         flex-wrap: wrap;
-        margin-top: 100px;
+        margin-top: 80px;
         font-size: 14px;
+    }
+    
+    .center-content {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin-top: 40px;
     }
     
     .main-name {
@@ -334,6 +346,15 @@ body {
         height: 60px;
     }
     
+    .bottom-center {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        margin-top: 60px;
+        margin-bottom: 20px;
+    }
+    
     .social-links {
         gap: 40px;
     }
@@ -341,6 +362,12 @@ body {
     .social-icon {
         width: 40px;
         height: 40px;
+        padding: 10px;
+    }
+    
+    .social-icon svg {
+        width: 20px;
+        height: 20px;
     }
 }
 
@@ -355,5 +382,9 @@ body {
     
     .top-right a {
         font-size: 12px;
+    }
+    
+    .social-links {
+        gap: 30px;
     }
 }
