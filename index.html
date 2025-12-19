@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Mohit</title>
+  <title>mohit's portfolio</title>
 
   <!-- Monospace font -->
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -54,9 +54,9 @@
 
     /* Outer frame */
     .frame {
-      width: 90%;
-      max-width: 1100px;
-      min-height: 85vh;
+      width: 94%;
+      max-width: 1200px;
+      min-height: 90vh;
       border: 2px solid var(--border);
       padding: 28px 32px;
       display: flex;
@@ -121,6 +121,34 @@
       color: var(--muted);
     }
 
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: revealUp 0.6s ease-out forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .toggle-animate {
+      animation: togglePulse 0.2s ease-out;
+    }
+
+    @keyframes togglePulse {
+      50% {
+        transform: scale(0.96);
+        opacity: 0.8;
+      }
+    }
+
+    .fade-out {
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+  }
     /* Footer links */
     .footer {
       display: flex;
@@ -192,10 +220,17 @@
   </style>
 </head>
 
+<body>
+
 <script>
   function toggleTheme() {
     const body = document.body;
     const btn = document.querySelector(".theme-toggle");
+
+    // click animation
+    btn.classList.remove("toggle-animate");
+    void btn.offsetWidth; // force reflow
+    btn.classList.add("toggle-animate");
 
     if (body.getAttribute("data-theme") === "light") {
       body.removeAttribute("data-theme");
@@ -205,24 +240,37 @@
       btn.textContent = "light";
     }
   }
+
+  // Smooth page transition on link click
+  document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", e => {
+      const href = link.getAttribute("href");
+      if (!href || href.startsWith("#")) return;
+
+      e.preventDefault();
+      document.body.classList.add("fade-out");
+
+      setTimeout(() => {
+        window.location.href = href;
+      }, 200);
+    });
+  });
 </script>
 
-
-<body>
   <div class="frame">
 
     <!-- Top bar -->
     <div class="nav">
-        <a href="index.html" class="home-avatar">
-        <img src="/pic.jpg" alt="home">
+        <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.2s;">
+          <img src="/assets/profile.jpg" alt="Mohit">
         </a>
 
 
         <div class="nav-center">
-        <a href="blogs/blog.html">blogs</a>
-        <a href="projects/project.html">projects</a>
-        <a href="papers/paper.html">research</a>
-        <a href="about/aboutme.html">about</a>
+          <a href="blogs/blog.html" class="reveal" style="animation-delay: 0.15s;">blogs</a>
+          <a href="projects/project.html" class="reveal" style="animation-delay: 0.2s;">projects</a>
+          <a href="papers/paper.html" class="reveal" style="animation-delay: 0.25s;">research</a>
+          <a href="about/aboutme.html" class="reveal" style="animation-delay: 0.3s;">about</a>
         </div>
 
         <button class="theme-toggle" onclick="toggleTheme()">
@@ -232,20 +280,25 @@
 
     <!-- Center content -->
     <div class="content">
-      <div class="name">MOHIT</div>
-      <div class="tagline">exploring vision models</div>
+      <div class="name reveal" style="animation-delay: 0.1s;">
+        MOHIT
+      </div>
+
+      <div class="tagline reveal" style="animation-delay: 0.25s;">
+        exploring vision models
+      </div>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-    <a href="https://x.com/mohitwt_" target="_blank" class="social">
+    <a href="https://x.com/mohitwt_" class="social reveal" target="_blank" style="animation-delay: 0.45s;">
         <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M18.244 2H21.552L14.36 10.242L22.828 22H16.184L10.98 14.844L4.684 22H1.372L9.056 13.214L0.828 2H7.64L12.356 8.488L18.244 2ZM17.088 20H18.92L6.644 4H4.676L17.088 20Z"/>
         </svg>
         X/Twitter
     </a>
 
-    <a href="https://github.com/Mog9" target="_blank" class="social">
+    <a href="https://github.com/Mog9" class="social reveal" target="_blank" style="animation-delay: 0.5s;">
         <!-- GitHub icon -->
         <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 .5C5.648.5.5 5.648.5 12c0 5.086 3.292 9.386 7.862 10.907.575.105.786-.25.786-.556 0-.274-.01-1.002-.015-1.966-3.198.695-3.873-1.54-3.873-1.54-.523-1.33-1.277-1.684-1.277-1.684-1.044-.714.08-.699.08-.699 1.155.081 1.763 1.186 1.763 1.186 1.027 1.76 2.695 1.252 3.35.957.104-.744.402-1.252.732-1.54-2.552-.29-5.236-1.276-5.236-5.681 0-1.255.448-2.282 1.184-3.087-.118-.29-.513-1.46.112-3.045 0 0 .965-.309 3.163 1.18a10.99 10.99 0 012.88-.387c.977.004 1.962.132 2.88.387 2.197-1.489 3.161-1.18 3.161-1.18.626 1.585.231 2.755.114 3.045.737.805 1.183 1.832 1.183 3.087 0 4.416-2.688 5.388-5.252 5.673.414.356.783 1.062.783 2.141 0 1.547-.014 2.795-.014 3.175 0 .309.209.667.792.554C20.71 21.382 24 17.083 24 12c0-6.352-5.148-11.5-12-11.5z"/>
