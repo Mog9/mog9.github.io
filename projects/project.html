@@ -1,1 +1,382 @@
-<h1>project test</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>projects</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #1e1e26;
+      --panel: #1b1b22;
+      --text: #ffb86c;
+      --muted: #c9a26b;
+      --border: #ffb86c;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f4f4;
+      --panel: #ffffff;
+      --text: #1e1e26;
+      --muted: #555555;
+      --border: #1e1e26;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: "JetBrains Mono", monospace;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .frame {
+      width: 94%;
+      max-width: 1200px;
+      min-height: 90vh;
+      border: 2px solid var(--border);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .home-avatar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      cursor: pointer;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .theme-toggle:hover {
+      background: var(--text);
+      color: var(--panel);
+    }
+
+    /* TITLE */
+    .title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin: 40px 0 28px;
+    }
+
+    /* PROJECT GRID */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .project-card {
+      border: 1px solid rgba(255, 184, 108, 0.35);
+      padding: 18px 20px;
+      background: transparent;
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .project-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .project-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .project-actions {
+      margin-top: 10px;
+    }
+
+    .project-link {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .project-link:hover {
+      text-decoration: underline;
+      color: var(--text);
+    }
+
+    .project-github svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--muted);
+    }
+
+    .project-github:hover svg {
+      fill: var(--text);
+    }
+
+    /* ANIMATIONS */
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: revealUp 0.6s ease-out forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.25s ease-out;
+    }
+
+    .toggle-animate {
+      animation: togglePulse 0.2s ease-out;
+    }
+
+    @keyframes togglePulse {
+      50% {
+        transform: scale(0.96);
+        opacity: 0.8;
+      }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .back-container {
+    margin-top: auto;
+    padding-top: 32px;
+    text-align: center;
+    }
+
+    .back-link {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    display: inline-block;
+    }
+
+    .back-link:hover {
+    background: var(--text);
+    color: var(--panel);
+    }
+
+    /* WIP SECTION */
+    .wip-container {
+    margin-top: 48px;
+    max-width: 360px;
+    }
+
+    .wip-card {
+    border-style: dashed;
+    }
+
+    .wip-text {
+    margin-top: 8px;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+
+<script>
+  function toggleTheme() {
+    const body = document.body;
+    const btn = document.querySelector(".theme-toggle");
+
+    btn.classList.remove("toggle-animate");
+    void btn.offsetWidth;
+    btn.classList.add("toggle-animate");
+
+    if (body.getAttribute("data-theme") === "light") {
+      body.removeAttribute("data-theme");
+      btn.textContent = "dark";
+    } else {
+      body.setAttribute("data-theme", "light");
+      btn.textContent = "light";
+    }
+  }
+
+  document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", e => {
+      const href = link.getAttribute("href");
+      if (!href || href.startsWith("#") || link.target === "_blank") return;
+
+      e.preventDefault();
+      document.body.classList.add("fade-out");
+      setTimeout(() => window.location.href = href, 200);
+    });
+  });
+
+  window.addEventListener("pageshow", () => {
+    document.body.classList.remove("fade-out");
+  });
+</script>
+
+<div class="frame">
+
+  <!-- NAV -->
+  <div class="nav">
+    <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
+      <img src="/pic.jpg" alt="home">
+    </a>
+
+    <button class="theme-toggle reveal" style="animation-delay: 0.2s;" onclick="toggleTheme()">
+      dark
+    </button>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title reveal" style="animation-delay: 0.3s;">
+    Projects
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="projects-grid reveal" style="animation-delay: 0.4s;">
+
+      
+      <!-- Pluto -->
+      <div class="project-card">
+          <div class="project-header">
+              <div class="project-title">Pluto</div>
+            </div>
+            <div class="project-desc">
+                Built a no-code web based machine learning trainer that lets users upload CSVs, select algorithms, visualizations and train models end-to-end.
+            </div>
+            <div class="project-actions">
+                <a href="https://pluto0.streamlit.app/" target="_blank" class="project-link">
+                    live link ↗
+                </a>
+            </div>
+        </div>
+
+    <!-- VecEngine -->
+    <div class="project-card">
+        <div class="project-header">
+            <div class="project-title">VecEngine</div>
+            <a href="https://github.com/Mog9/VecEngine" target="_blank" class="project-github">
+                <svg viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.16 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.79.55C20.71 21.38 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/></svg>
+            </a>
+        </div>
+        <div class="project-desc">
+            A lightweight vector database, retrieval engine, and custom indexer, all built completely from scratch.
+        </div>
+    </div>
+    
+    <!-- customGPT-RAG -->
+    <div class="project-card">
+        <div class="project-header">
+            <div class="project-title">customGPT-RAG</div>
+            <a href="https://github.com/Mog9/customGPT-RAG" target="_blank" class="project-github">
+                <svg viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.16 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.79.55C20.71 21.38 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/></svg>
+            </a>
+        </div>
+        <div class="project-desc">
+            custom RAG system that uses local document embeddings and generative AI to provide accurate, context-aware answers from private knowledge.
+      </div>
+    </div>
+    
+    <!-- Autograd-NN -->
+    <div class="project-card">
+        <div class="project-header">
+            <div class="project-title">Autograd-NN</div>
+            <a href="https://github.com/Mog9/Autograd-NN" target="_blank" class="project-github">
+                <svg viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.16 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.79.55C20.71 21.38 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/></svg>
+            </a>
+        </div>
+        <div class="project-desc">
+            Implemented a fully connected autograd engine and neural network from scratch in pure Python.
+        </div>
+    </div>
+    
+    <!-- micrograd-in-cpp -->
+    <div class="project-card">
+        <div class="project-header">
+            <div class="project-title">micrograd-in-cpp</div>
+            <a href="https://github.com/Mog9/micrograd-in-cpp" target="_blank" class="project-github">
+                <svg viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.16 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.79.55C20.71 21.38 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/></svg>
+            </a>
+        </div>
+        <div class="project-desc">
+            andrej karpathy's micrograd python implementation in c++
+      </div>
+    </div>
+    
+</div>
+
+<!-- (WIP) DL FRAMEWORK PROJECT -->
+<div class="wip-container reveal" style="animation-delay: 0.45s;">
+<div class="project-card wip-card">
+    <div class="project-title">Deep Learning Framework</div>
+
+    <div class="project-desc">
+    building my own custom deep learning framework from scratch
+    </div>
+
+    <div class="wip-text">
+    work in progress
+    </div>
+</div>
+</div>
+
+
+<div class="back-container reveal" style="animation-delay: 0.5s;">
+    <a href="/index.html" class="back-link">
+        ← back
+    </a>
+</div>
+
+</div>
+
+</body>
+</html>
