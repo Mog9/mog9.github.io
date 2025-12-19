@@ -1,1 +1,272 @@
-<h1>test blog</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blogs</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #1e1e26;
+      --panel: #1b1b22;
+      --text: #ffb86c;
+      --muted: #c9a26b;
+      --border: #ffb86c;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f4f4;
+      --panel: #ffffff;
+      --text: #1e1e26;
+      --muted: #555555;
+      --border: #1e1e26;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: "JetBrains Mono", monospace;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .frame {
+      width: 94%;
+      max-width: 1200px;
+      min-height: 90vh;
+      border: 2px solid var(--border);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .home-avatar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      cursor: pointer;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .theme-toggle:hover {
+      background: var(--text);
+      color: var(--panel);
+    }
+
+    /* TITLE */
+    .title {
+      text-align: center;
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin: 40px 0 24px;
+    }
+
+    /* BLOG LIST */
+    .blog-list {
+      flex: 1;
+      border: 1px solid var(--border);
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .blog-item {
+      margin-bottom: 18px;
+    }
+
+    .blog-item a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    .blog-item a:hover {
+      text-decoration: underline;
+    }
+
+    /* Animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: revealUp 0.6s ease-out forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.25s ease-out;
+    }
+
+    .toggle-animate {
+      animation: togglePulse 0.2s ease-out;
+    }
+
+    @keyframes togglePulse {
+      50% {
+        transform: scale(0.96);
+        opacity: 0.8;
+      }
+    }
+    .blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    }
+
+    .blog-card {
+    display: block;
+    border: 1px solid var(--border);
+    padding: 18px 20px;
+    text-decoration: none;
+    color: var(--text);
+    }
+
+    .blog-card:hover {
+    background: rgba(255, 184, 108, 0.05);
+    }
+
+    .blog-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    }
+
+    .blog-meta {
+    font-size: 12px;
+    color: var(--muted);
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="frame">
+
+  <!-- NAV -->
+  <div class="nav">
+    <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
+      <img src="/pic.jpg" alt="home">
+    </a>
+
+    <div></div>
+
+    <div class="reveal" style="animation-delay: 0.15s;">
+      <button class="theme-toggle" onclick="toggleTheme()">dark</button>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title reveal" style="animation-delay: 0.2s;">
+    BLOGS
+  </div>
+
+  <!-- BLOG LIST -->
+<div class="blog-list reveal" style="animation-delay: 0.3s;">
+
+  <a href="distilling.html" class="blog-card">
+    <div class="blog-title">
+      Distilling Knowledge in a Neural Network (research paper)
+    </div>
+    <div class="blog-meta">
+      Dec 19, 2025
+    </div>
+  </a>
+
+  <!-- <a href="blog2.html" class="blog-card">
+    <div class="blog-title">
+      What actually happens inside a convolution
+    </div>
+    <div class="blog-meta">
+      Nov 06, 2025 · 8 min read
+    </div>
+  </a> -->
+
+  <!-- <a href="blog3.html" class="blog-card">
+    <div class="blog-title">
+      Why GPUs think in warps, not threads
+    </div>
+    <div class="blog-meta">
+      Jun 18, 2025 · 5 min read
+    </div>
+  </a>
+
+  <a href="blog4.html" class="blog-card">
+    <div class="blog-title">
+      Shared memory and why it sometimes betrays you
+    </div>
+    <div class="blog-meta">
+      May 21, 2025 · 8 min read
+    </div>
+  </a> -->
+
+</div>
+
+
+<script>
+  function toggleTheme() {
+    const body = document.body;
+    const btn = document.querySelector(".theme-toggle");
+
+    btn.classList.remove("toggle-animate");
+    void btn.offsetWidth;
+    btn.classList.add("toggle-animate");
+
+    if (body.getAttribute("data-theme") === "light") {
+      body.removeAttribute("data-theme");
+      btn.textContent = "dark";
+    } else {
+      body.setAttribute("data-theme", "light");
+      btn.textContent = "light";
+    }
+  }
+
+  document.querySelectorAll("a").forEach(link => {
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#")) return;
+
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      document.body.classList.add("fade-out");
+
+      setTimeout(() => {
+        window.location.href = href;
+      }, 200);
+    });
+  });
+</script>
+
+</body>
+</html>

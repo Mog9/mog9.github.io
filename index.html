@@ -227,9 +227,8 @@
     const body = document.body;
     const btn = document.querySelector(".theme-toggle");
 
-    // click animation
     btn.classList.remove("toggle-animate");
-    void btn.offsetWidth; // force reflow
+    void btn.offsetWidth;
     btn.classList.add("toggle-animate");
 
     if (body.getAttribute("data-theme") === "light") {
@@ -269,13 +268,16 @@
         <div class="nav-center">
           <a href="blogs/blog.html" class="reveal" style="animation-delay: 0.15s;">blogs</a>
           <a href="projects/project.html" class="reveal" style="animation-delay: 0.2s;">projects</a>
-          <a href="papers/paper.html" class="reveal" style="animation-delay: 0.25s;">research</a>
+          <a href="papers/paper.html" class="reveal" style="animation-delay: 0.25s;">papers</a>
           <a href="about/aboutme.html" class="reveal" style="animation-delay: 0.3s;">about</a>
         </div>
 
-        <button class="theme-toggle reveal" style="animation-delay: 0.35s;" onclick="toggleTheme()">
-          dark
-        </button> 
+        <div class="reveal" style="animation-delay: 0.35s;">
+          <button class="theme-toggle" onclick="toggleTheme()">
+            dark
+          </button>
+        </div>
+
     </div>
 
     <!-- Center content -->
