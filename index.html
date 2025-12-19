@@ -253,6 +253,9 @@
         window.location.href = href;
       }, 200);
     });
+    window.addEventListener("pageshow", function (event) {
+    document.body.classList.remove("fade-out");
+  });
   });
 </script>
 
