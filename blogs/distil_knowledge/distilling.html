@@ -268,10 +268,10 @@
         This idea has since become a core technique for model compression and efficient deployment.
       </p>
 
-      <figure class="figure small">
+      <figure class="figure medium">
       <img src="pic1.jpg" alt="flow">
        <figcaption>
-          Figure 1: Example of Distilled Models
+          Figure 1: Example of Distilled Model
         </figcaption>
        </figure>
         
@@ -293,7 +293,7 @@
 
       <p>
       Crucially, the teacher does not supervise the student using hard class labels. Instead, it provides its raw outputs (logits), which are later softened using temperature-scaled softmax.
-      These softened outputs encode relationships between classes <br>
+      These softened outputs encode relationships between classes: <br>
       for example, how similar a “cat” image is to “dog” versus “airplane”, and this structure becomes the knowledge that is distilled into the student model.
       </p>
       
@@ -314,8 +314,8 @@
 
       <p>
       To make this imitation meaningful, the teacher’s logits are passed through a softmax with temperature. Increasing the temperature smooths the output distribution,
-       preventing it from collapsing into a single dominant class. This exposes information about class similarities and uncertainty <br> 
-      for example, whether an image of a cat is closer to a dog than to a truck — which would be completely lost with hard labels.
+       preventing it from collapsing into a single dominant class. This exposes information about class similarities and uncertainty: <br> 
+      for example, whether an image of a cat is closer to a dog than to a truck, which would be completely lost with hard labels.
       </p>
       
       <figure class="figure small">
