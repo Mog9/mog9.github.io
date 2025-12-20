@@ -91,13 +91,28 @@
     /* PAPER LIST */
     .paper-list {
       flex: 1;
-      border: 1px solid var(--border);
+      border: none;
       padding: 20px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 16px;
+      max-height: calc(90vh - 220px);
+      overflow-y: auto;
+      padding-right: 6px;
     }
+    .paper-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .paper-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 184, 108, 0.4);
+    }
+
+    .paper-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
 
     .paper-card {
       border: 1px solid var(--border);
@@ -242,13 +257,11 @@
   </div>
 
 
-
-
-
-
   <!-- PAPER LIST -->
   <div class="paper-list reveal" style="animation-delay: 0.3s;">
+
     
+
     <!-- PAPER CARD -->
     <!-- block 1 --> 
     <div class="paper-card">
@@ -268,10 +281,8 @@
         read paper →
         </a>
     </div>
-
-
     </div>
-
+<!-- block end-->
 
 
 
@@ -310,7 +321,8 @@
         read paper →
         </a>
     </div>
-
+    </div> 
+<!-- block end-->
 
 
 
@@ -346,10 +358,9 @@
         class="paper-read">
         read paper →
         </a>
-    </div> -->
-
-  </div>
-
+    </div> 
+  </div>-->
+<!-- block end-->
 </div>
 
 <script>

@@ -91,7 +91,7 @@
     /* BLOG LIST */
     .blog-list {
       flex: 1;
-      border: 1px solid var(--border);
+      border: none;
       padding: 20px;
       overflow-y: auto;
     }
@@ -156,6 +156,25 @@
     .blog-card:hover {
     background: rgba(255, 184, 108, 0.05);
     }
+    .blog-list {
+    max-height: calc(90vh - 220px);
+    overflow-y: auto;
+    padding-right: 6px;
+    }
+
+    .blog-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .blog-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 184, 108, 0.4);
+    }
+
+    .blog-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+
 
     .blog-title {
     font-size: 16px;
@@ -212,9 +231,9 @@
     <div class="blog-meta">
       Dec 20, 2026
     </div>
-  </a> -->
+  </a> 
 
-  <!-- <a href="blog3.html" class="blog-card">
+  <a href="blog3.html" class="blog-card">
     <div class="blog-title">
       Why GPUs think in warps, not threads
     </div>
