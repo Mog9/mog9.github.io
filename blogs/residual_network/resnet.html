@@ -352,10 +352,79 @@
       </p>
 
 
+      <h2>Implementation</h2>
 
-      <!-- <pre><code>
-       test
-      </code></pre> -->
+      <p>
+        I’ll walk through my implementation of the paper and the results I observed while training the model:
+      </p>
+      <p>
+        The core of the implementation is a residual base block built using two convolution layers with batch normalization. 
+        The flow inside the block is <br> <code>conv → bn → relu → conv → bn → x(shortcut) → relu </code> <br>The shortcut adds 
+        the original input back to the block output, allowing the network to preserve information when the best mapping is identity, 
+        instead of forcing every layer to actively transform its input.
+      </p>
+
+        <figure class="figure medium">
+        <img src="pic5.png" alt="resnet block">
+        <figcaption>
+          Figure 5. residual base block
+        </figcaption>
+        </figure>
+
+        <p>
+          Using this base block, a ResNet-18 model is constructed by stacking residual blocks into multiple stages. Each stage 
+          keeps the same block structure while gradually increasing the number of channels and reducing spatial resolution in the
+           first block of the stage. This allows the network to grow deeper without making optimization unstable, since
+            information can flow across layers through the shortcut connections.<br>
+          <code>Conv → BatchNorm → ReLU<br>
+            → Layer1 → Layer2 → Layer3 → Layer4<br>
+            → Global Average Pool → Linear</code>
+        </p>
+
+      <pre><code>
+    #stem
+    self.conv1 = nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=3, bias=False)
+    self.bn1 = nn.BatchNorm2d(16)
+    self.relu = nn.ReLU(inplace=False)
+
+    #residual layer (2 blocks each, so 8 total)
+    self.layer1 = self._make_layer(16, 2, stride=1)
+    self.layer2 = self._make_layer(32, 2, stride=2)
+    self.layer3 = self._make_layer(64, 2, stride=2)
+    self.layer4 = self._make_layer(128, 2, stride=2)
+
+    #head
+    self.avgpool = nn.AdaptiveAvgPool2d((1,1))
+    self.fc = nn.Linear(128, num_classes)
+      </code></pre>
+
+      <p>
+        The model is trained on CIFAR-10 using standard supervised learning.<br> 
+        - used a batch size of 64<br>
+        - train for 60 epochs, and optimize with SGD and momentum,<br> 
+        - starting with a learning rate of 0.1 and decaying it using a multi-step scheduler. </p>
+        <pre><code>
+      scheduler = torch.optim.lr_scheduler.MultiStepLR(
+      optimizer,
+      milestones=[30, 45],
+      gamma=0.1
+    )
+        </code></pre>
+        <p>
+        With proper scheduling and enough training time, the model converges cleanly, reaching around <b>91% test accuracy</b> 
+        while the training loss drops from roughly <b>1.89 to 0.6</b>
+      </p>
+
+        <figure class="figure small">
+        <img src="pic6.png" alt="resnet block flowchart">
+        <figcaption>
+            Figure 6. Results
+        </figcaption>
+        </figure>
+        <p>
+         Overall, this implementation shows that residual connections are not a cosmetic architectural choice,
+          but a practical solution that makes deep networks easier to optimize and train reliably as depth increases.
+        </p>
 
     </div>
 
