@@ -66,6 +66,7 @@
     }
 
     .theme-toggle {
+      width: 56px;
       background: none;
       border: 1px solid var(--border);
       color: var(--text);
@@ -74,6 +75,7 @@
       padding: 6px 12px;
       cursor: pointer;
     }
+
 
     .theme-toggle:hover {
       background: var(--text);
@@ -170,10 +172,10 @@
 
     @keyframes togglePulse {
       50% {
-        transform: scale(0.96);
-        opacity: 0.8;
+        opacity: 0.7;
       }
     }
+
 
     /* RESPONSIVE */
     @media (max-width: 900px) {
@@ -233,6 +235,8 @@
   function toggleTheme() {
     const body = document.body;
     const btn = document.querySelector(".theme-toggle");
+  
+    body.classList.remove("fade-out");
 
     btn.classList.remove("toggle-animate");
     void btn.offsetWidth;
@@ -258,7 +262,7 @@
     });
   });
 
-  window.addEventListener("pageshow", () => {
+  document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.remove("fade-out");
   });
 </script>
