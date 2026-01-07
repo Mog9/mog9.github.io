@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Distilling Knowledge</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #1e1e26;
+      --panel: #1b1b22;
+      --text: #ffb86c;
+      --muted: #c9a26b;
+      --border: #ffb86c;
+    }
+
+    [data-theme="light"] {
+      --bg: #f4f4f4;
+      --panel: #ffffff;
+      --text: #1e1e26;
+      --muted: #555555;
+      --border: #1e1e26;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: "JetBrains Mono", monospace;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* FRAME */
+    .frame {
+      width: 94%;
+      max-width: 1200px;
+      min-height: 90vh;
+      border: 2px solid var(--border);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .home-avatar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      cursor: pointer;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .theme-toggle:hover {
+      background: var(--text);
+      color: var(--panel);
+    }
+
+    /* ARTICLE LAYOUT */
+    .article {
+      margin: 40px auto;
+      width: 100%;
+      max-width: 720px; /* reading width */
+    }
+
+    .article-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .article-meta {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    /* TYPOGRAPHY */
+    .article p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .article h2 {
+      font-size: 22px;
+      margin: 48px 0 16px;
+    }
+
+    .article h3 {
+      font-size: 18px;
+      margin: 32px 0 12px;
+    }
+
+    .article code {
+      background: rgba(255, 184, 108, 0.12);
+      padding: 2px 6px;
+      font-size: 14px;
+    }
+
+    .article pre {
+      background: rgba(255, 184, 108, 0.08);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 24px 0;
+    }
+
+    .article pre code {
+      background: none;
+      padding: 0;
+    }
+
+    /* ANIMATIONS */
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: revealUp 0.6s ease-out forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.25s ease-out;
+    }
+
+    .toggle-animate {
+      animation: togglePulse 0.2s ease-out;
+    }
+
+    @keyframes togglePulse {
+      50% {
+        transform: scale(0.96);
+        opacity: 0.8;
+      }
+    }
+
+    figure {
+    margin: 32px 0;
+    text-align: center;
+    }
+
+    .figure img {
+    max-width: 100%;
+    border: 1px solid var(--border);
+    }
+
+    /* Size variants */
+    .figure.small img {
+    max-width: 360px;
+    }
+
+    .figure.medium img {
+    max-width: 520px;
+    }
+
+    .figure.large img {
+    max-width: 720px;
+    }
+
+    /* Caption */
+    .figure figcaption {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    }
+
+    /* BACK LINK */
+    .back-container {
+    margin-top: 64px;
+    text-align: center;
+    }
+
+    .back-link {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    display: inline-block;
+    }
+
+    .back-link:hover {
+    background: var(--text);
+    color: var(--panel);
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="frame">
+
+  <!-- NAV -->
+  <div class="nav">
+    <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
+      <img src="/pic.jpg" alt="home">
+    </a>
+
+    <div></div>
+
+    <div class="reveal" style="animation-delay: 0.15s;">
+      <button class="theme-toggle" onclick="toggleTheme()">dark</button>
+    </div>
+  </div>
+
+  <!-- ARTICLE -->
+  <article class="article">
+
+    <h1 class="article-title reveal" style="animation-delay: 0.2s;">
+    Diffusion Models and Backpropagation Explained
+    </h1>
+
+    <div class="article-meta reveal" style="animation-delay: 0.25s;">
+      7 Jan 2026
+    </div>
+
+    <div class="reveal" style="animation-delay: 0.3s;">
+    <p>
+    Diffusion models are a class of generative models that learn to generate data by reversing a gradual corruption process. Instead of trying to produce a complex image in one step, they frame generation as a sequence of small denoising steps. The core idea is that if we can systematically add noise to data until it becomes random, we can train a model to learn how to undo that noise step by step. This turns image generation into a tractable, iterative process rather than a single hard prediction.
+    </p>
+
+    <p>
+    The forward pass in a diffusion model defines this corruption process. Starting from a clean image, small amounts of Gaussian noise are added at each timestep, slightly degrading the image. As timesteps increase, more signal is destroyed and the image becomes increasingly noisy. After enough steps, the image is indistinguishable from pure noise. Importantly, this forward process is fixed and does not involve learning.
+    </p>
+
+    <p>
+        As the timestep increases, the signal-to-noise ratio decreases in a controlled manner defined by the noise schedule. Early timesteps preserve most of the image structure, while later timesteps are dominated by noise. This gradual corruption ensures that the transition from data to noise is smooth, which is crucial for training a stable reverse process later on.
+    </p>
+
+    <figure class="figure medium">
+      <img src="fwd_pass.png" alt="medium image">
+      <figcaption>
+          Figure 1: Visualization of the forward diffusion process. A clean image is progressively corrupted by adding Gaussian noise over timesteps until it becomes indistinguishable from pure noise.
+      </figcaption>
+      </figure>
+      <p>
+          Mathematically, the forward process constructs a noisy image <i>x<sub>t</sub></i> from the original image <i>x<sub>0</sub></i> using the equation shown in <b>Figure 2</b>, 
+          where <i>ε</i> is sampled from a standard normal distribution. The term <i>ᾱ<sub>t</sub></i> represents how much of the original signal is retained after <i>t</i> timesteps, and it decreases as <i>t</i> grows. This formulation is especially useful because it allows sampling a noisy image at any timestep directly from the original image, without simulating all intermediate noise additions.
+        </p>
+        
+        <figure class="figure medium">
+          <img src="fwd_math.png" alt="medium image">
+          <figcaption>
+              Figure 2: Forward diffusion process. A noisy image <i>xt</i> is generated by combining the original image <i>x0</i> with Gaussian noise <i>ε</i>, where the contribution of noise increases with the timestep <i>t</i>
+          </figcaption>
+          </figure>
+          
+          <p>
+              Once the forward process has transformed data into noise, the goal of training is to learn how to reverse this process. Since the forward pass is fixed and non-learnable, all learning happens in the reverse direction. Backpropagation is used to train a neural network that can infer how much noise is present in a noisy image at a given timestep. This learned mapping is what enables the model to gradually undo the corruption introduced during the forward pass.
+            </p>
+            
+            <p>
+                Instead of predicting the original clean image directly, the network is trained to predict the noise that was added at each timestep. Given a noisy image and its timestep, the model outputs an estimate of the injected noise, and backpropagation minimizes the error between the predicted and true noise. Learning this simpler, local objective is more stable than full reconstruction and provides a reliable denoising direction that can be applied repeatedly during the reverse process.
+            </p>
+            <figure class="figure medium">
+              <img src="back_pass.png" alt="medium image">
+              <figcaption>
+                  Figure 3: Overview of diffusion-based image generation. During training, images are progressively corrupted through the forward diffusion process until they become pure noise. A neural network is trained via backpropagation to learn the reverse diffusion process, which iteratively removes noise and reconstructs structure. At inference time, this learned reverse process is applied to random noise to generate new images.
+              </figcaption>
+              </figure>
+            
+              <p>
+                 From a mathematical perspective, <i>x<sub>0</sub></i> represents the original clean image, while <i>x<sub>t</sub></i> is the noisy version of that image at timestep <i>t</i>, obtained through the forward diffusion process. The symbol <i>ε</i> denotes the Gaussian noise that was added to the image, sampled from a standard normal distribution. The neural network, written as <i>ε<sub>θ</sub>(x<sub>t</sub>, t)</i>, takes the noisy image and its timestep as input and predicts the noise that should be present at that step. The loss measures the squared difference between the true noise and the predicted noise, and backpropagation updates the parameters <i>θ</i> so that the network becomes increasingly accurate at predicting noise across different timesteps.
+            </p>
+
+            <figure class="figure medium">
+              <img src="back_math.png" alt="medium image">
+              <figcaption>
+                  Figure 4: Mathematical formulation of backpropagation in diffusion models, where predicting noise at each timestep enables iterative denoising during generation.
+              </figcaption>
+              </figure>
+              
+              
+              <p>
+                  Training is performed by minimizing the mean squared error between the true injected noise and the noise predicted by the network. Since the forward process explicitly adds known Gaussian noise, the target is always available during training. This objective is simpler and more stable than directly predicting the clean image, especially at high noise levels where reconstruction would be ambiguous.
+                </p>
+                
+                <p>
+                    Gradients are computed by backpropagating the noise prediction error through the network parameters. This allows the model to adjust its weights so that, given a noisy image and its timestep, it produces a more accurate estimate of the underlying noise. Over many training steps, gradient descent shapes the network into a function that captures how noise behaves at different noise levels.
+                </p>
+                
+                <p>
+                    Once trained, the network’s noise predictions define a local denoising direction at each timestep. By repeatedly applying these learned denoising steps in reverse order, the model gradually transforms noise into structured images. Although perfect reconstruction requires large models and substantial compute, this training procedure establishes the core mechanism that makes diffusion-based generation possible.
+                </p>
+                
+                <p>
+                    <b>My implementation:</b> I implemented this training procedure from scratch on a single fox image, optimizing the noise-prediction network for approximately 15,000 training steps. The model successfully learns to denoise and recover structure step by step, but reaching full sharpness would require larger models and more compute than available here. The result below demonstrates the diffusion process working correctly, even under constrained resources.
+                </p>
+                <figure class="figure medium">
+                  <img src="denoise.png" alt="medium image">
+                  <figcaption>
+                      Figure 5: Progressive denoising during the reverse diffusion process. 
+                  </figcaption>
+                  </figure>
+               <p>
+                Diffusion models work by turning generation into a sequence of simple denoising problems learned through backpropagation. Even with limited compute, this implementation demonstrates how structure can emerge from noise when the forward and reverse processes are correctly defined. Scaling model capacity and compute would further improve detail, but the underlying diffusion mechanics remain the same.
+               </p>
+    </div>
+
+    <div class="back-container reveal" style="animation-delay: 0.4s;">
+    <a href="blog.html" class="back-link">
+        ← back to blogs
+    </a>
+    </div>
+
+  </article>
+
+</div>
+
+<script>
+  function toggleTheme() {
+    const body = document.body;
+    const btn = document.querySelector(".theme-toggle");
+
+    btn.classList.remove("toggle-animate");
+    void btn.offsetWidth;
+    btn.classList.add("toggle-animate");
+
+    if (body.getAttribute("data-theme") === "light") {
+      body.removeAttribute("data-theme");
+      btn.textContent = "dark";
+    } else {
+      body.setAttribute("data-theme", "light");
+      btn.textContent = "light";
+    }
+  }
+
+  document.querySelectorAll("a").forEach(link => {
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#")) return;
+
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      document.body.classList.add("fade-out");
+
+      setTimeout(() => {
+        window.location.href = href;
+      }, 200);
+    });
+  });
+</script>
+
+</body>
+</html>
