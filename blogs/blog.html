@@ -3,29 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <title>Blogs</title>
-
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --bg: #1e1e26;
-      --panel: #1b1b22;
       --text: #ffb86c;
       --muted: #c9a26b;
       --border: #ffb86c;
     }
-
     [data-theme="light"] {
       --bg: #f4f4f4;
-      --panel: #ffffff;
       --text: #1e1e26;
       --muted: #555555;
       --border: #1e1e26;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -34,26 +27,14 @@
       font-family: "JetBrains Mono", monospace;
       color: var(--text);
       display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .frame {
-      width: 94%;
-      max-width: 1200px;
-      min-height: 90vh;
-      border: 2px solid var(--border);
-      padding: 28px 32px;
-      display: flex;
       flex-direction: column;
-      background: var(--panel);
     }
 
-    /* NAV */
     .nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 24px 40px;
     }
 
     .home-avatar img {
@@ -61,8 +42,10 @@
       height: 36px;
       border-radius: 50%;
       border: 2px solid var(--border);
+      object-fit: cover;
       cursor: pointer;
     }
+    .home-avatar img:hover { opacity: 0.85; }
 
     .theme-toggle {
       background: none;
@@ -73,196 +56,121 @@
       padding: 6px 12px;
       cursor: pointer;
     }
+    .theme-toggle:hover { background: var(--text); color: var(--bg); }
 
-    .theme-toggle:hover {
-      background: var(--text);
-      color: var(--panel);
-    }
-
-    /* TITLE */
     .title {
       text-align: center;
-      font-size: 40px;
+      font-size: 48px;
       font-weight: 700;
       letter-spacing: 2px;
-      margin: 40px 0 24px;
+      margin: 20px 0 32px;
     }
 
-    /* BLOG LIST */
     .blog-list {
       flex: 1;
-      border: none;
-      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 40px;
       overflow-y: auto;
     }
 
-    .blog-item {
-      margin-bottom: 18px;
-    }
+    .blog-list::-webkit-scrollbar { width: 6px; }
+    .blog-list::-webkit-scrollbar-thumb { background: rgba(255,184,108,0.4); }
+    .blog-list::-webkit-scrollbar-track { background: transparent; }
 
-    .blog-item a {
-      color: var(--text);
+    .blog-card {
+      display: block;
+      border: 1px solid var(--border);
+      padding: 18px 20px;
       text-decoration: none;
-      font-size: 15px;
+      color: var(--text);
+    }
+    .blog-card:hover { background: rgba(255,184,108,0.05); }
+
+    .blog-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .blog-meta { font-size: 12px; color: var(--muted); }
+
+    .footer {
+      display: flex;
+      justify-content: center;
+      padding: 24px 40px;
     }
 
-    .blog-item a:hover {
-      text-decoration: underline;
+    .back-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 18px;
+      cursor: pointer;
+      text-decoration: none;
     }
+    .back-btn:hover { background: var(--text); color: var(--bg); }
 
-    /* Animations */
     .reveal {
       opacity: 0;
       transform: translateY(10px);
       animation: revealUp 0.6s ease-out forwards;
     }
+    @keyframes revealUp { to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes revealUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .toggle-animate { animation: togglePulse 0.2s ease-out; }
+    @keyframes togglePulse { 50% { transform: scale(0.96); opacity: 0.8; } }
+
+    .fade-out { opacity: 0; transition: opacity 0.25s ease-out; }
+
+    @media (max-width: 768px) {
+      .nav { padding: 20px 24px; }
+      .title { font-size: 36px; }
+      .blog-list { padding: 0 24px; }
     }
-
-    .fade-out {
-      opacity: 0;
-      transition: opacity 0.25s ease-out;
-    }
-
-    .toggle-animate {
-      animation: togglePulse 0.2s ease-out;
-    }
-
-    @keyframes togglePulse {
-      50% {
-        transform: scale(0.96);
-        opacity: 0.8;
-      }
-    }
-    .blog-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    }
-
-    .blog-card {
-    display: block;
-    border: 1px solid var(--border);
-    padding: 18px 20px;
-    text-decoration: none;
-    color: var(--text);
-    }
-
-    .blog-card:hover {
-    background: rgba(255, 184, 108, 0.05);
-    }
-    .blog-list {
-    max-height: calc(90vh - 220px);
-    overflow-y: auto;
-    padding-right: 6px;
-    }
-
-    .blog-list::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .blog-list::-webkit-scrollbar-thumb {
-      background: rgba(255, 184, 108, 0.4);
-    }
-
-    .blog-list::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-
-
-    .blog-title {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    }
-
-    .blog-meta {
-    font-size: 12px;
-    color: var(--muted);
-    }
-
   </style>
 </head>
-
 <body>
 
-<div class="frame">
-
-  <!-- NAV -->
   <div class="nav">
     <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
       <img src="/pic.jpg" alt="home">
     </a>
-
     <div></div>
-
     <div class="reveal" style="animation-delay: 0.15s;">
       <button class="theme-toggle" onclick="toggleTheme()">dark</button>
     </div>
   </div>
 
-  <!-- TITLE -->
-  <div class="title reveal" style="animation-delay: 0.2s;">
-    BLOGS
+  <div class="title reveal" style="animation-delay: 0.2s;">BLOGS</div>
+
+  <div class="blog-list reveal" style="animation-delay: 0.3s;">
+    <a href="distil_knowledge/distilling.html" class="blog-card">
+      <div class="blog-title">Distilling Knowledge in a Neural Network</div>
+      <div class="blog-meta">Dec 19, 2025</div>
+    </a>
+    <a href="residual_network/resnet.html" class="blog-card">
+      <div class="blog-title">Deep Residual Learning for Image Recognition</div>
+      <div class="blog-meta">Dec 23, 2025</div>
+    </a>
+    <a href="backprop_diffusion/backprop.html" class="blog-card">
+      <div class="blog-title">Diffusion Models and Backpropagation Explained</div>
+      <div class="blog-meta">7 Jan 2026</div>
+    </a>
   </div>
 
-  <!-- BLOG LIST -->
-<div class="blog-list reveal" style="animation-delay: 0.3s;">
-
-  <a href="distil_knowledge/distilling.html" class="blog-card">
-    <div class="blog-title">
-      Distilling Knowledge in a Neural Network
-    </div>
-    <div class="blog-meta">
-      Dec 19, 2025
-    </div>
-  </a>
-
-  <a href="residual_network/resnet.html" class="blog-card">
-    <div class="blog-title">
-      Deep Residual Learning for Image Recognition
-    </div>
-    <div class="blog-meta">
-      Dec 23, 2025
-    </div>
-  </a> 
-
-  <a href="backprop_diffusion/backprop.html" class="blog-card">
-    <div class="blog-title">
-      Diffusion Models and Backpropagation Explained
-    </div>
-    <div class="blog-meta">
-      7 Jan 2026
-    </div>
-  </a>
-
-  <!-- <a href="blog4.html" class="blog-card">
-    <div class="blog-title">
-      Shared memory and why it sometimes betrays you
-    </div>
-    <div class="blog-meta">
-      May 21, 2025 · 8 min read
-    </div>
-  </a> -->
-
-</div>
-
+  <div class="footer reveal" style="animation-delay: 0.4s;">
+    <a href="/index.html" class="back-btn">back</a>
+  </div>
 
 <script>
   function toggleTheme() {
     const body = document.body;
     const btn = document.querySelector(".theme-toggle");
-
     btn.classList.remove("toggle-animate");
     void btn.offsetWidth;
     btn.classList.add("toggle-animate");
-
     if (body.getAttribute("data-theme") === "light") {
       body.removeAttribute("data-theme");
       btn.textContent = "dark";
@@ -273,20 +181,17 @@
   }
 
   document.querySelectorAll("a").forEach(link => {
-    const href = link.getAttribute("href");
-    if (!href || href.startsWith("#")) return;
-
     link.addEventListener("click", e => {
+      const href = link.getAttribute("href");
+      if (!href || href.startsWith("#")) return;
       e.preventDefault();
       document.body.classList.add("fade-out");
-
-      setTimeout(() => {
-        window.location.href = href;
-      }, 200);
+      setTimeout(() => { window.location.href = href; }, 200);
     });
-    window.addEventListener("pageshow", function (event) {
-    document.body.classList.remove("fade-out");
   });
+
+  window.addEventListener("pageshow", () => {
+    document.body.classList.remove("fade-out");
   });
 </script>
 
