@@ -3,29 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <title>Research Papers</title>
-
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --bg: #1e1e26;
-      --panel: #1b1b22;
       --text: #ffb86c;
       --muted: #c9a26b;
       --border: #ffb86c;
     }
-
     [data-theme="light"] {
       --bg: #f4f4f4;
-      --panel: #ffffff;
       --text: #1e1e26;
       --muted: #555555;
       --border: #1e1e26;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -34,19 +27,7 @@
       font-family: "JetBrains Mono", monospace;
       color: var(--text);
       display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .frame {
-      width: 94%;
-      max-width: 1200px;
-      min-height: 90vh;
-      border: 2px solid var(--border);
-      padding: 28px 32px;
-      display: flex;
       flex-direction: column;
-      background: var(--panel);
     }
 
     /* NAV */
@@ -54,6 +35,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 24px 40px;
     }
 
     .home-avatar img {
@@ -62,7 +44,9 @@
       border-radius: 50%;
       border: 2px solid var(--border);
       cursor: pointer;
+      object-fit: cover;
     }
+    .home-avatar img:hover { opacity: 0.85; }
 
     .theme-toggle {
       background: none;
@@ -73,134 +57,98 @@
       padding: 6px 12px;
       cursor: pointer;
     }
-
-    .theme-toggle:hover {
-      background: var(--text);
-      color: var(--panel);
-    }
+    .theme-toggle:hover { background: var(--text); color: var(--bg); }
 
     /* TITLE */
     .title {
       text-align: center;
-      font-size: 36px;
+      font-size: 48px;
       font-weight: 700;
-      letter-spacing: 1px;
-      margin: 40px 0 24px;
+      letter-spacing: 2px;
+      margin: 0 0 32px;
     }
 
     /* PAPER LIST */
     .paper-list {
       flex: 1;
-      border: none;
-      padding: 20px;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      max-height: calc(90vh - 220px);
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 40px;
       overflow-y: auto;
-      padding-right: 6px;
-    }
-    .paper-list::-webkit-scrollbar {
-      width: 6px;
     }
 
-    .paper-list::-webkit-scrollbar-thumb {
-      background: rgba(255, 184, 108, 0.4);
-    }
-
-    .paper-list::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
+    .paper-list::-webkit-scrollbar { width: 6px; }
+    .paper-list::-webkit-scrollbar-thumb { background: rgba(255,184,108,0.4); }
+    .paper-list::-webkit-scrollbar-track { background: transparent; }
 
     .paper-card {
       border: 1px solid var(--border);
       padding: 18px 20px;
     }
 
-    .paper-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .paper-meta {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    .paper-link {
-    font-size: 12px;
-    color: var(--muted);
-    text-decoration: none;
-    }
-
-    .paper-link:hover {
-    text-decoration: underline;
-    color: var(--text);
-    }
+    .paper-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .paper-meta { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
 
     .paper-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
     }
 
-    .paper-left {
-    display: flex;
-  } 
+    .paper-left { display: flex; }
 
     .paper-repo {
-    display: flex;
-    padding: 6px;
-    align-items: center;
-    gap: 6px;
-    font-size: 16px;
-    color: var(--muted);
-    text-decoration: none;
+      display: flex;
+      padding: 6px;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
     }
-
-    .paper-repo svg {
-    width: 16px;
-    height: 16px;
-    fill: var(--muted);
-    }
-
-    .paper-repo:hover {
-    color: var(--text);
-    }
-
-    .paper-repo:hover svg {
-    fill: var(--text);
-    }
+    .paper-repo svg { width: 16px; height: 16px; fill: var(--muted); }
+    .paper-repo:hover { color: var(--text); }
+    .paper-repo:hover svg { fill: var(--text); }
 
     .paper-read {
-    margin-left: auto;
-    font-size: 15px;
-    color: var(--muted);
-    text-decoration: none;
+      margin-left: auto;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
     }
-
-    .paper-read:hover {
-    text-decoration: underline;
-    color: var(--text);
-    }
+    .paper-read:hover { text-decoration: underline; color: var(--text); }
 
     .paper-blog {
-    font-size: 15px;
-    color: var(--muted);
-    text-decoration: none;
-    margin: 0 auto;
-  }
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      margin: 0 auto;
+    }
+    .paper-blog:hover { text-decoration: underline; color: var(--text); }
 
-  .paper-blog:hover {
-    text-decoration: underline;
-    color: var(--text);
-  }
+    /* FOOTER */
+    .footer {
+      display: flex;
+      justify-content: center;
+      padding: 24px 40px;
+    }
 
+    .back-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 18px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .back-btn:hover { background: var(--text); color: var(--bg); }
 
     /* ANIMATIONS */
     .reveal {
@@ -208,191 +156,89 @@
       transform: translateY(10px);
       animation: revealUp 0.6s ease-out forwards;
     }
+    @keyframes revealUp { to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes revealUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .fade-out {
-      opacity: 0;
-      transition: opacity 0.25s ease-out;
-    }
-
-    .toggle-animate {
-      animation: togglePulse 0.2s ease-out;
-    }
-
-    @keyframes togglePulse {
-      50% {
-        transform: scale(0.96);
-        opacity: 0.8;
-      }
-    }
+    .fade-out { opacity: 0; transition: opacity 0.25s ease-out; }
+    .toggle-animate { animation: togglePulse 0.2s ease-out; }
+    @keyframes togglePulse { 50% { transform: scale(0.96); opacity: 0.8; } }
   </style>
 </head>
 
 <body>
 
-<div class="frame">
-
-  <!-- NAV -->
   <div class="nav">
     <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
       <img src="/pic.jpg" alt="home">
     </a>
-
     <div></div>
-
     <div class="reveal" style="animation-delay: 0.15s;">
       <button class="theme-toggle" onclick="toggleTheme()">dark</button>
     </div>
   </div>
 
-  <!-- TITLE -->
-  <div class="title reveal" style="animation-delay: 0.2s;">
-    research papers I’ve read
-  </div>
+  <div class="title reveal" style="animation-delay: 0.2s;">research papers I've read</div>
 
-
-  <!-- PAPER LIST -->
   <div class="paper-list reveal" style="animation-delay: 0.3s;">
 
-    
-
-    <!-- PAPER CARD -->
-    <!-- block 1 --> 
+    <!-- block 1 -->
     <div class="paper-card">
-
-    <div class="paper-title">
-        A Few Useful Things to Know about Machine Learning
+      <div class="paper-title">A Few Useful Things to Know about Machine Learning</div>
+      <div class="paper-meta">Pedro Domingos</div>
+      <div class="paper-actions">
+        <a href="https://scispace.com/pdf/a-few-useful-things-to-know-about-machine-learning-2dqv211i8z.pdf" target="_blank" class="paper-read">read paper →</a>
+      </div>
     </div>
 
-    <div class="paper-meta">
-        Pedro Domingos
-    </div>
-
-    <div class="paper-actions">
-        <a href="https://scispace.com/pdf/a-few-useful-things-to-know-about-machine-learning-2dqv211i8z.pdf"
-        target="_blank"
-        class="paper-read">
-        read paper →
-        </a>
-    </div>
-    </div>
-<!-- block end-->
-
-
-
-
-
-
-  <!-- block 2 --> 
+    <!-- block 2 -->
     <div class="paper-card">
-
-    <div class="paper-title">
-        Distilling the Knowledge in a Neural Network
-    </div>
-
-    <div class="paper-meta">
-        Geoffrey Hinton, Oriol Vinyals, Jeff Dean
-    </div>
-
-    <div class="paper-actions">
-        <a href="https://github.com/Mog9/research-papers/tree/main/Distilling_Knowledge_NN"
-        target="_blank"
-        class="paper-repo">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.16 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.79.55C20.71 21.38 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/>
-        </svg>
-        check implementation
+      <div class="paper-title">Distilling the Knowledge in a Neural Network</div>
+      <div class="paper-meta">Geoffrey Hinton, Oriol Vinyals, Jeff Dean</div>
+      <div class="paper-actions">
+        <a href="https://github.com/Mog9/research-papers/tree/main/Distilling_Knowledge_NN" target="_blank" class="paper-repo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.16 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.79.55C20.71 21.38 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/></svg>
+          check implementation
         </a>
-
-        <a href="/blogs/distil_knowledge/distilling.html"
-        class="paper-blog">
-        read blog
-      </a>
-
-        <a href="https://arxiv.org/pdf/1503.02531"
-        target="_blank"
-        class="paper-read">
-        read paper →
-        </a>
+        <a href="/blogs/distil_knowledge/distilling.html" class="paper-blog">read blog</a>
+        <a href="https://arxiv.org/pdf/1503.02531" target="_blank" class="paper-read">read paper →</a>
+      </div>
     </div>
-    </div> 
-<!-- block end-->
 
-
-
-
-  <!-- block 3 -->
+    <!-- block 3 -->
     <div class="paper-card">
-
-    <div class="paper-title">
-        Deep Residual Learning for Image Recognition
+      <div class="paper-title">Deep Residual Learning for Image Recognition</div>
+      <div class="paper-meta">Microsoft Research</div>
+      <div class="paper-actions">
+        <a href="https://github.com/Mog9/research-papers/tree/main/Residual_Learning" target="_blank" class="paper-repo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.16 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.79.55C20.71 21.38 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/></svg>
+          check implementation
+        </a>
+        <a href="/blogs/residual_network/resnet.html" class="paper-blog">read blog</a>
+        <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf" target="_blank" class="paper-read">read paper →</a>
+      </div>
     </div>
 
-    <div class="paper-meta">
-        Microsoft Research
+    <!-- block 4 -->
+    <div class="paper-card">
+      <div class="paper-title">Transformers For Image Recognition At Scale</div>
+      <div class="paper-meta">Google Research</div>
+      <div class="paper-actions">
+        <a href="https://openreview.net/pdf?id=YicbFdNTTy" target="_blank" class="paper-read">read paper →</a>
+      </div>
     </div>
 
-    <div class="paper-actions">
-        <a href="https://github.com/Mog9/research-papers/tree/main/Residual_Learning"
-        target="_blank"
-        class="paper-repo">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.16 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.79.55C20.71 21.38 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/>
-        </svg>
-        check implementation
-        </a>
-
-        <a href="/blogs/residual_network/resnet.html"
-        class="paper-blog">
-        read blog
-      </a>
-
-        <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf"
-        target="_blank"
-        class="paper-read">
-        read paper →
-        </a>
-    </div> 
   </div>
-<!-- block end-->
 
-  <!-- block 4 -->
-    <div class="paper-card">
-
-    <div class="paper-title">
-         Transformers For Image Recognition At Scale
-    </div>
-
-    <div class="paper-meta">
-        Google Research
-    </div>
-
-    <div class="paper-actions">
-        <a href="https://openreview.net/pdf?id=YicbFdNTTy"
-        target="_blank"
-        class="paper-read">
-        read paper →
-        </a>
-    </div> 
+  <div class="footer reveal" style="animation-delay: 0.4s;">
+    <a href="/index.html" class="back-btn">back</a>
   </div>
-<!-- block end-->
-</div>
 
 <script>
   function toggleTheme() {
     const body = document.body;
     const btn = document.querySelector(".theme-toggle");
-
     btn.classList.remove("toggle-animate");
     void btn.offsetWidth;
     btn.classList.add("toggle-animate");
-
     if (body.getAttribute("data-theme") === "light") {
       body.removeAttribute("data-theme");
       btn.textContent = "dark";
@@ -403,20 +249,17 @@
   }
 
   document.querySelectorAll("a").forEach(link => {
-    const href = link.getAttribute("href");
-    if (!href || href.startsWith("#")) return;
-
     link.addEventListener("click", e => {
+      const href = link.getAttribute("href");
+      if (!href || href.startsWith("#") || href.startsWith("http")) return;
       e.preventDefault();
       document.body.classList.add("fade-out");
-
-      setTimeout(() => {
-        window.location.href = href;
-      }, 200);
+      setTimeout(() => { window.location.href = href; }, 200);
     });
-    window.addEventListener("pageshow", function (event) {
-    document.body.classList.remove("fade-out");
   });
+
+  window.addEventListener("pageshow", () => {
+    document.body.classList.remove("fade-out");
   });
 </script>
 
