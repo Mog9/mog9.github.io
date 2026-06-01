@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Custom Memory Allocator from Scratch</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --panel: #f5f0e8;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --border: #d1ccc4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: "JetBrains Mono", monospace;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+    }
+
+    .frame {
+      width: 94%;
+      max-width: 1200px;
+      min-height: 90vh;
+      border: 1px solid var(--border);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .home-avatar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .article {
+      margin: 40px auto;
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .article-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .article-meta {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    .article p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .article h2 {
+      font-size: 22px;
+      margin: 48px 0 16px;
+    }
+
+    .article h3 {
+      font-size: 18px;
+      margin: 32px 0 12px;
+    }
+
+    .article code {
+      background: rgba(0, 0, 0, 0.06);
+      padding: 2px 6px;
+      font-size: 14px;
+    }
+
+    .article pre {
+      background: rgba(0, 0, 0, 0.04);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 24px 0;
+    }
+
+    .article pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: revealUp 0.6s ease-out forwards;
+    }
+
+    @keyframes revealUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-out { opacity: 0; transition: opacity 0.25s ease-out; }
+
+    figure {
+      margin: 32px 0;
+      text-align: center;
+    }
+
+    .figure img {
+      max-width: 100%;
+      border: 1px solid var(--border);
+    }
+
+    .figure.small img { max-width: 360px; }
+    .figure.medium img { max-width: 520px; }
+    .figure.large img { max-width: 720px; }
+
+    .figure figcaption {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .back-container {
+      margin-top: 64px;
+      text-align: center;
+    }
+
+    .back-link {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      display: inline-block;
+    }
+
+    .back-link:hover {
+      background: var(--text);
+      color: var(--panel);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="frame">
+
+  <div class="nav">
+    <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
+      <img src="/pic.jpg" alt="home">
+    </a>
+    <div></div>
+  </div>
+
+  <article class="article">
+
+    <h1 class="article-title reveal" style="animation-delay: 0.2s;">
+      Custom Memory Allocator from Scratch in C/C++
+    </h1>
+
+    <div class="article-meta reveal" style="animation-delay: 0.25s;">
+      April 28, 2026
+    </div>
+
+    <div class="reveal" style="animation-delay: 0.3s;">
+
+      <p>
+        Every program thinks it owns the entire memory on your machine. That's a lie the OS tells it, and it's a useful one.
+      </p>
+
+      <p>
+        When your program accesses memory, it's not touching RAM directly. It's talking to virtual memory, an abstraction layer the OS puts between your program and physical RAM. Your program gets a clean, private address space that looks contiguous and starts from zero. What's actually happening underneath is a completely different story.
+      </p>
+
+      <p>
+        Physical RAM is divided into fixed size chunks called frames, typically 4KB each. Your program's virtual memory is divided into the same size chunks called pages. The OS maintains a data structure called the page table that maps each virtual page to a physical frame. When your program reads or writes an address, the CPU checks the page table and translates that virtual address to wherever the data actually lives in RAM.
+      </p>
+
+      <p>
+        The key thing is that virtual page 1 and virtual page 2 don't need to be in adjacent frames in physical RAM. They can be scattered anywhere. Your program never knows or cares, it always sees a clean contiguous address space. The page table handles the translation invisibly.
+      </p>
+
+      <p>
+        This is why two programs can both use address <code>0x1000</code> without stepping on each other. Same virtual address, completely different physical frames.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img1.png" alt="virtual memory mapping">
+
+      </figure>
+
+      <h2>What happens when a page isn't in RAM yet?</h2>
+
+      <p>
+        RAM is limited. Your machine might have 16GB but you could have dozens of programs running, each with their own virtual address space. The OS can't keep everything in RAM at once, so it doesn't try.
+      </p>
+
+      <p>
+        When your program accesses a virtual address, the CPU checks the page table. If that page has a valid mapping to a physical frame, great, the memory access goes through. But if the page isn't currently in RAM, the page table entry is marked invalid. The CPU triggers a page fault.
+      </p>
+
+      <p>
+        A page fault isn't a crash. It's an interrupt that hands control to the OS. The OS finds the data on disk (in swap space), loads it into a free physical frame, updates the page table to point to that frame, and hands control back to your program. Your program never knew any of this happened.
+      </p>
+
+      <p>
+        This is also why your program can use more virtual memory than you have physical RAM. The OS just swaps pages in and out of disk as needed. The cost is that disk access is orders of magnitude slower than RAM, so if you're constantly page faulting you'll feel it.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img2.png" alt="page fault flow">
+
+      </figure>
+
+      <h2>How your program gets memory from the OS</h2>
+
+      <p>
+        Your program doesn't talk to RAM directly. It asks the OS for memory, and the OS decides what to give it and where. There are two main ways to do this: <code>sbrk</code> and <code>mmap</code>.
+      </p>
+
+      <h3>sbrk</h3>
+
+      <p>
+        Your program has a region called the heap, a chunk of virtual memory reserved for dynamic allocation. The heap has a boundary called the program break. Everything below the break is yours, everything above is not.
+      </p>
+
+      <p>
+        <code>sbrk</code> moves that boundary. Call <code>sbrk(1024)</code> and the heap grows by 1024 bytes. The OS returns a pointer to where the old break was, which is the start of your new memory.
+      </p>
+
+      <p>
+        Simple, fast, but limited. The heap only grows in one direction. If you allocate block A, then block B, then free block A, that space can't go back to the OS until block B is also freed because the break is stuck behind B. This causes fragmentation and heap bloat over time.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img3.png" alt="heap fragmentation with sbrk">
+
+      </figure>
+
+      <p>
+        The other problem is large allocations. Say you allocate 1GB with <code>sbrk</code>. Your heap grows by 1GB. When you free that memory, the allocator marks it free internally but the OS still thinks your program is using the full 1GB. That memory stays claimed until everything above it is also freed, so the heap never shrinks. For programs that make large short-lived allocations, this is a real problem.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img4.png" alt="large allocation heap bloat">
+
+      </figure>
+
+      <h3>mmap</h3>
+
+      <p>
+        <code>mmap</code> is more flexible. Instead of extending the heap, it asks the OS for an entirely new region of virtual memory at an arbitrary address. You can request any size, and when you're done, <code>munmap</code> returns that region back to the OS independently, without touching anything else.
+      </p>
+
+      <pre><code>void* ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);</code></pre>
+
+      <p>
+        Breaking down each argument:
+      </p>
+
+      <p>
+        <code>NULL</code> is the address hint. You are telling the OS to pick the address itself. You can pass a specific address but there is rarely a reason to.
+      </p>
+
+      <p>
+        <code>size</code> is how many bytes you want. Unlike <code>sbrk</code>, you can request any amount independently of what you have already allocated.
+      </p>
+
+      <p>
+        <code>PROT_READ | PROT_WRITE</code> are the protection flags. This tells the OS the memory should be readable and writable. You can also pass <code>PROT_EXEC</code> if you need executable memory, but for a heap allocator you never need that.
+      </p>
+
+      <p>
+        <code>MAP_PRIVATE | MAP_ANONYMOUS</code> are the mapping flags. <code>MAP_PRIVATE</code> means changes to this memory are not shared with other processes. <code>MAP_ANONYMOUS</code> means the memory is not backed by any file, just zeroed pages from the OS.
+      </p>
+
+      <p>
+        <code>-1</code> is the file descriptor. Required to be -1 when using <code>MAP_ANONYMOUS</code> since there is no file involved.
+      </p>
+
+      <p>
+        <code>0</code> is the offset into the file. Also irrelevant for anonymous mappings, just pass zero.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img5.png" alt="mmap allocates separate region">
+
+      </figure>
+
+      <h2>Block headers and metadata</h2>
+
+      <p>
+        When you call <code>malloc(100)</code>, something needs to remember that this chunk is 100 bytes and whether it's in use or not. You can't just hand out raw memory and forget about it, because when <code>free</code> is called later, you need to know how much to reclaim.
+      </p>
+
+      <p>
+        The solution is to store that information yourself, right next to the memory you hand out.
+      </p>
+
+      <p>
+        Before returning memory to the user, the allocator writes a small struct just before it. That struct is the block header, or metadata. It sits invisibly in the heap, the user never sees it, but the allocator reads it every time it needs to manage that block.
+      </p>
+
+      <p>
+        For this allocator, the header looks like this:
+      </p>
+
+      <pre><code>struct block {
+    size_t size;
+    block* next;
+    bool is_free;
+};</code></pre>
+
+      <p>
+        <code>size</code> is how many bytes the user requested. <code>is_free</code> tracks whether this block is available for reuse. <code>next</code> is a pointer to the next block in the free list, which we will get to shortly.
+      </p>
+
+      <p>
+        In memory, every allocation looks like this:
+      </p>
+
+      <figure class="figure medium">
+        <img src="img6.png" alt="block header layout in memory">
+
+      </figure>
+
+      <p>
+        <code>mymalloc</code> and <code>myfree</code> is my implementation from scratch in C/C++, if interested for full implementation repo, you can check <a href="https://github.com/Mog9/Memory-Allocator" target="_blank">here</a>.
+      </p>
+
+      <p>
+        When <code>mymalloc</code> is called, it places the header at the current position in the pool, writes the metadata, then returns a pointer just past the header. That pointer is what the user works with.
+      </p>
+
+      <p>
+        When <code>myfree</code> is called, the pointer comes back in. The allocator steps back by <code>sizeof(block)</code> to find the header sitting right before it, reads the size, and marks the block free.
+      </p>
+
+      <pre><code>block* meta = (block*)ptr - 1;
+meta-&gt;is_free = true;</code></pre>
+
+      <p>
+        One pointer subtraction and you are back at the metadata. That is the entire trick.
+      </p>
+
+      <h2>Free list</h2>
+
+      <p>
+        Every block your allocator has ever created needs to be tracked somewhere. That is what the free list is for.
+      </p>
+
+      <p>
+        The free list is a linked list of all blocks in your pool, both allocated and free. Every block points to the next one via the <code>next</code> pointer in its header. The allocator keeps a global pointer to the front of this list.
+      </p>
+
+      <pre><code>block* free_list = nullptr;</code></pre>
+
+      <p>
+        When a new block is carved from the pool, it gets added to the free list. When a block is freed, it stays in the list but gets marked <code>is_free = true</code>. It is not removed, not returned to the OS, just flagged as available.
+      </p>
+
+      <p>
+        This matters because the next time <code>mymalloc</code> is called, instead of immediately consuming new pool memory, it walks the free list first looking for a block that is already free and big enough to satisfy the request.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img7.png" alt="free list walk">
+
+      </figure>
+
+      <pre><code>block* current = free_list;
+
+while(current != NULL &amp;&amp; !(current-&gt;is_free &amp;&amp; current-&gt;size &gt;= size)) {
+    current = current-&gt;next;
+}</code></pre>
+
+      <p>
+        If <code>current</code> is not null after the loop, a suitable block was found. Mark it allocated and return it. No new memory consumed, no pool space wasted.
+      </p>
+
+      <pre><code>if(current != NULL) {
+    current-&gt;is_free = false;
+    return current + 1;
+}</code></pre>
+
+      <p>
+        If nothing fits, carve a new block from the pool.
+      </p>
+
+      <p>
+        One important detail: the free list must be kept sorted by memory address. If blocks are inserted in random order, coalescing breaks, which we will get to later. Every new block is inserted into the list at the position matching its address, not prepended to the front.
+      </p>
+
+      <h2>Block Reuse</h2>
+
+      <p>
+        Once a block is freed, it does not disappear. It stays in the free list with <code>is_free</code> set to <code>true</code>, sitting in the pool waiting to be claimed again. The next time <code>mymalloc</code> is called, it walks the free list before touching any new pool memory. If it finds a block that is free and large enough, it takes it.
+      </p>
+
+      <p>
+        This is the difference between a real allocator and just calling <code>mmap</code> every time. Reusing freed blocks means fewer system calls, less memory consumed, and better performance.
+      </p>
+
+      <p>
+        The proof is in the addresses. In the output below, <code>ptr2</code> is allocated and gets address <code>0x7fa2c2420018</code>. It gets freed. Then <code>ptr3</code> is allocated and gets the exact same address <code>0x7fa2c2420018</code>. No new pool memory was touched. The allocator found the freed block and handed it back.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img8.png" alt="block reuse address proof">
+
+      </figure>
+
+      <h2>Alignment</h2>
+
+      <p>
+        When you ask for 7 bytes, your allocator does not give you exactly 7 bytes. It rounds up to 8. This is not a bug, it is alignment.
+      </p>
+
+      <p>
+        CPUs do not read memory one byte at a time. They read in fixed size chunks called words, typically 8 bytes on a 64-bit system. If your data starts at an address that is not a multiple of 8, the CPU has to do extra work to piece it together from two separate reads.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img9.png" alt="misaligned access">
+
+      </figure>
+
+      <p>
+        On some architectures like ARM, misaligned access will straight up crash your program with a bus error. On x86 it will not crash, but it is slower. Either way, you want your allocations to start at aligned addresses.
+      </p>
+
+      <p>
+        The fix is to round every requested size up to the nearest multiple of 8 before doing anything else. This one line handles it:
+      </p>
+
+      <pre><code>size = (size + sizeof(void*) - 1) &amp; ~(sizeof(void*) - 1);</code></pre>
+
+      <p>
+        Breaking it down with an example. Say the user requests 13 bytes. <code>sizeof(void*)</code> on a 64-bit system is 8.
+      </p>
+
+      <p>
+        <code>13 + 8 - 1 = 20</code>
+      </p>
+
+      <p>
+        Then the bitwise mask <code>~7</code> in binary is <code>1111...11111000</code>. ANDing 20 with that clears the lower 3 bits, rounding down to the nearest multiple of 8.
+      </p>
+
+      <p>
+        <code>20 &amp; ~7 = 16</code>
+      </p>
+
+      <p>
+        So 13 bytes becomes 16. The pattern is, add 7 to push any non-aligned size past the next boundary, then mask to round back down. The combination gives you a round up.
+      </p>
+
+      <p>
+        <code>sizeof(void*)</code> is used instead of hardcoding 8 so it works correctly on both 32-bit and 64-bit systems.
+      </p>
+
+      <h2>First fit and Best fit</h2>
+
+      <p>
+        When <code>mymalloc</code> walks the free list looking for a block to reuse, it needs a strategy for which block to pick. There are two common approaches.
+      </p>
+
+      <p>
+        <strong>First fit</strong> takes the first block in the list that is free and large enough. The walk stops as soon as a match is found.
+      </p>
+
+      <pre><code>while(current != NULL &amp;&amp; !(current-&gt;is_free &amp;&amp; current-&gt;size &gt;= size)) {
+    current = current-&gt;next;
+}</code></pre>
+
+      <p>
+        Simple and fast. You do not walk the entire list every time, just until you find something that works.
+      </p>
+
+      <p>
+        <strong>Best fit</strong> walks the entire list and picks the smallest block that is still large enough. The idea is to waste as little space as possible by finding the closest match.
+      </p>
+
+      <p>
+        Best fit sounds smarter but it has a real cost. You always walk the entire list, which is slower. And ironically, best fit tends to leave behind lots of tiny leftover fragments that are too small to be useful, which can actually make fragmentation worse over time.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img10.png" alt="fragmentation from best fit">
+
+      </figure>
+
+      <p>
+        My allocator uses first fit. For a simple pool-based allocator it is the right call. The list is short, the overhead is low, and it gets the job done without the fragmentation side effects of best fit.
+      </p>
+
+      <h2>Coalescing</h2>
+
+      <p>
+        Block reuse solves one problem but creates another. Over time, as blocks get allocated and freed in different orders, the free list fills up with small scattered free blocks. Even if the total free memory is large enough for a new allocation, no single block might be big enough to satisfy it.
+      </p>
+
+      <p>
+        This is called external fragmentation: a request for 16 bytes fails even though 24 bytes are free.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img11.png" alt="external fragmentation">
+
+      </figure>
+
+      <p>
+        The fix is coalescing. When a block is freed, check its neighbors in the list. If any adjacent blocks are also free, merge them into one larger block.
+      </p>
+
+      <p>
+        There are two directions to check: forward and backward.
+      </p>
+
+      <p>
+        Forward is straightforward. After marking a block free, check if the next block in the list is also free and physically adjacent in memory. If yes, absorb it.
+      </p>
+
+      <pre><code>if(ptr-&gt;next &amp;&amp; ptr-&gt;next-&gt;is_free &amp;&amp;
+   (char*)ptr + sizeof(block) + ptr-&gt;size == (char*)ptr-&gt;next) {
+    ptr-&gt;size += sizeof(block) + ptr-&gt;next-&gt;size;
+    ptr-&gt;next = ptr-&gt;next-&gt;next;
+}</code></pre>
+
+      <figure class="figure medium">
+        <img src="img12.png" alt="forward coalescing">
+
+      </figure>
+
+      <p>
+        The adjacency check <code>(char*)ptr + sizeof(block) + ptr-&gt;size == (char*)ptr-&gt;next</code> is important. Just because two blocks are next to each other in the linked list does not mean they are next to each other in memory. You have to verify they are physically adjacent before merging, otherwise you corrupt memory.
+      </p>
+
+      <p>
+        Backward works the same way but in reverse. Walk the free list from the start to find the block that points to the current block. If that previous block is free and adjacent, merge the current block into it.
+      </p>
+
+      <pre><code>block* current = free_list;
+while(current &amp;&amp; current-&gt;next != ptr) {
+    current = current-&gt;next;
+}
+if(current &amp;&amp; current-&gt;is_free &amp;&amp;
+   (char*)current + sizeof(block) + current-&gt;size == (char*)ptr) {
+    current-&gt;size += sizeof(block) + ptr-&gt;size;
+    current-&gt;next = ptr-&gt;next;
+}</code></pre>
+
+      <figure class="figure medium">
+        <img src="img13.png" alt="backward coalescing">
+
+      </figure>
+
+      <p>
+        One more thing that makes or breaks coalescing: the free list must be sorted by memory address. If blocks are inserted in random order, the adjacency checks fail because physically adjacent blocks end up non-adjacent in the list. Every new block gets inserted at the correct position by address, not prepended to the front.
+      </p>
+
+      <h2>Why mmap alone breaks coalescing, and the memory pool fix</h2>
+
+      <p>
+        The first version of this allocator called <code>mmap</code> for every single allocation. It worked for basic allocation and reuse, but coalescing never triggered. The reason comes down to how <code>mmap</code> works.
+      </p>
+
+      <p>
+        Every <code>mmap</code> call returns a completely independent region of virtual memory. Two consecutive <code>mmap</code> calls do not give you adjacent memory. They can land anywhere in your address space, pages apart. So even if you free two blocks and they are next to each other in the free list, the adjacency check always fails because physically they are nowhere near each other.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img14.png" alt="mmap non-adjacent regions">
+
+      </figure>
+
+      <p>
+        No matter how correct your coalesce logic is, it cannot merge blocks that are not physically next to each other in memory.
+      </p>
+
+      <p>
+        The fix is a memory pool. Instead of calling <code>mmap</code> per allocation, call it once upfront for a large chunk, say 1MB. Then carve all allocations out of that single contiguous region yourself.
+      </p>
+
+      <pre><code>char* pool_start = nullptr;
+char* pool_current = nullptr;
+
+void init_pool() {
+    pool_start = (char*)mmap(NULL, 1024*1024, PROT_READ | PROT_WRITE,
+                             MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    pool_current = pool_start;
+}</code></pre>
+
+      <p>
+        Now every block sits inside the same region. <code>pool_current</code> acts as a bump pointer, advancing forward with each allocation by the size of the block plus its metadata.
+      </p>
+
+      <pre><code>block* meta = (block*) pool_current;
+pool_current += total_size;</code></pre>
+
+      <p>
+        With all blocks contiguous in one pool, the adjacency check in coalesce actually has a chance to pass. Two adjacent blocks in the free list are now also adjacent in memory.
+      </p>
+
+      <figure class="figure medium">
+        <img src="img15.png" alt="contiguous pool enables coalescing">
+
+      </figure>
+
+      <p>
+        This is also closer to what real allocators do. <code>jemalloc</code> and <code>tcmalloc</code> both manage large pre-allocated regions internally rather than going to the OS for every small allocation. The pool approach trades some upfront memory for much better allocation performance and predictable memory layout.
+      </p>
+
+      <h2>Conclusion</h2>
+
+      <p>
+        If you made it this far, you now understand everything that goes into a basic memory allocator. Virtual memory, page tables, how the OS hands out memory, block metadata, free lists, alignment, allocation strategies, coalescing, and why memory layout matters more than you think.
+      </p>
+
+      <p>
+        This is not a production allocator. It has no thread safety, no block splitting, no pool overflow handling. But that is not the point. The point is that none of this is magic anymore. When you call <code>malloc</code> in any program, you now know roughly what is happening underneath.
+      </p>
+
+      <p>
+        If you want to build your own, this article is the foundation. Start with a simple pool, get allocation and free working, add the free list, then add coalescing. Each piece builds on the last. The code is on <a href="https://github.com/Mog9/Memory-Allocator" target="_blank">GitHub</a> if you want a reference, but write it yourself first.
+      </p>
+
+      <p>
+        The best way to understand systems is to build them from scratch and break them in interesting ways. This was one of those builds.
+      </p>
+
+    </div>
+
+    <div class="back-container reveal" style="animation-delay: 0.4s;">
+    <a href="/blogs/blog.html" class="back-link">
+        ← back to blogs
+    </a>
+    </div>
+
+  </article>
+
+</div>
+
+<script>
+  document.querySelectorAll("a").forEach(link => {
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#")) return;
+
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      document.body.classList.add("fade-out");
+      setTimeout(() => { window.location.href = href; }, 200);
+    });
+  });
+
+  window.addEventListener("pageshow", () => {
+    document.body.classList.remove("fade-out");
+  });
+</script>
+
+</body>
+</html>
