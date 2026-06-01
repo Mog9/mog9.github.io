@@ -7,16 +7,10 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #1e1e26;
-      --text: #ffb86c;
-      --muted: #c9a26b;
-      --border: #ffb86c;
-    }
-    [data-theme="light"] {
-      --bg: #f4f4f4;
-      --text: #1e1e26;
-      --muted: #555555;
-      --border: #1e1e26;
+      --bg: #f5f0e8;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --border: #d1ccc4;
     }
 
     * { box-sizing: border-box; }
@@ -33,15 +27,19 @@
 
     .nav {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 24px 40px;
+      padding: 24px 80px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
     }
 
     .nav-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
       gap: 28px;
-      font-size: 20px;
+      font-size: 16px;
     }
 
     .nav-center a { color: var(--text); text-decoration: none; }
@@ -51,41 +49,23 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 2px solid var(--border);
       object-fit: cover;
       cursor: pointer;
     }
     .home-avatar img:hover { opacity: 0.85; }
 
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 15px;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-    .theme-toggle:hover { background: var(--text); color: var(--bg); }
-
     .main {
       flex: 1;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      padding: 48px 0 0 0;
     }
 
     .content {
       text-align: left;
       max-width: 650px;
       padding: 0 14px;
-    }
-
-    .name {
-      font-size: 58px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      margin: 0 0 20px 0;
     }
 
     .bio {
@@ -101,12 +81,68 @@
 
     .bio strong { color: var(--text); font-weight: 600; }
 
+    .experience {
+      width: 100%;
+      max-width: 650px;
+      margin-top: 56px;
+      padding: 0 14px;
+    }
+
+    .exp-section-label {
+      font-size: 13px;
+      color: var(--muted);
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .exp-role {
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    .exp-meta {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .exp-desc {
+      margin: 16px 0 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .exp-desc li {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 8px;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .exp-desc li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+    }
+
     .footer {
       display: flex;
       justify-content: center;
       gap: 48px;
       padding: 24px 40px;
       font-size: 18px;
+      border-top: 1px solid var(--border);
     }
 
     .social {
@@ -125,12 +161,8 @@
       opacity: 0;
       transform: translateY(10px);
       animation: revealUp 0.6s ease-out forwards;
-      /* font-size: ; */
     }
     @keyframes revealUp { to { opacity: 1; transform: translateY(0); } }
-
-    .toggle-animate { animation: togglePulse 0.2s ease-out; }
-    @keyframes togglePulse { 50% { transform: scale(0.96); opacity: 0.8; } }
 
     .fade-out { opacity: 0; transition: opacity 0.25s ease-out; }
 
@@ -144,21 +176,6 @@
 <body>
 
 <script>
-  function toggleTheme() {
-    const body = document.body;
-    const btn = document.querySelector(".theme-toggle");
-    btn.classList.remove("toggle-animate");
-    void btn.offsetWidth;
-    btn.classList.add("toggle-animate");
-    if (body.getAttribute("data-theme") === "light") {
-      body.removeAttribute("data-theme");
-      btn.textContent = "dark";
-    } else {
-      body.setAttribute("data-theme", "light");
-      btn.textContent = "light";
-    }
-  }
-
   document.querySelectorAll("a").forEach(link => {
     link.addEventListener("click", e => {
       const href = link.getAttribute("href");
@@ -181,27 +198,32 @@
     <div class="nav-center">
       <a href="blogs/blog.html" class="reveal" style="animation-delay: 0.15s;">blogs</a>
       <a href="projects/project.html" class="reveal" style="animation-delay: 0.2s;">projects</a>
-      <a href="papers/paper.html" class="reveal" style="animation-delay: 0.25s;">papers</a>
-    </div>
-    <div class="reveal" style="animation-delay: 0.3s;">
-      <button class="theme-toggle" onclick="toggleTheme()">dark</button>
     </div>
   </div>
 
   <div class="main">
     <div class="content">
-      <div class="name reveal" style="animation-delay: 0.2s;">HELLO, I'M MOHIT</div>
       <div class="bio">
+        <p class="reveal" style="animation-delay: 0.2s;">
+          i'm <strong>mohit</strong>, i like to build things from scratch and work with llm inference — working with cuda, triton, and gpu kernel programming.
+        </p>
         <p class="reveal" style="animation-delay: 0.3s;">
-          <!-- <strong>currently building a custom deep learning framework from scratch.</strong> -->
-        </p>
-        <p class="reveal" style="animation-delay: 0.4s;">
-          i like building things from scratch and lately i'm into inference — working with cuda, triton, and gpu kernel programming.
-        </p>
-        <p class="reveal" style="animation-delay: 0.5s;">
-          i've built a few projects along the way: triton-based speculative decoding for Qwen3 on AMD MI300X, a CUDA inference engine for GPT models from scratch, dynamic vision transformer inference, and more.
+          i've built a few projects along the way: triton-based speculative decoding for qwen3 on amd mi300x, a cuda inference engine for gpt models from scratch, dynamic vision transformer inference, and more.
         </p>
       </div>
+    </div>
+
+    <div class="experience reveal" style="animation-delay: 0.6s;">
+      <div class="exp-section-label">Experience</div>
+      <div class="exp-header">
+        <span class="exp-role">deep learning engineering — <strong>offtoning</strong></span>
+        <span class="exp-meta">jan 2026 — mar 2026</span>
+      </div>
+      <ul class="exp-desc">
+        <li>Built a custom deep learning framework from scratch in Python with NumPy and CuPy backends supporting tensor ops, autograd, and GPU-accelerated computation</li>
+        <li>Implemented neural network modules, optimizers, mathematical kernels, and training pipelines for image and video editing models</li>
+        <li>Developed end-to-end model training, inference, and experimentation infrastructure for rapid deployment workflows</li>
+      </ul>
     </div>
   </div>
 
@@ -217,6 +239,12 @@
         <path d="M12 .5C5.648.5.5 5.648.5 12c0 5.086 3.292 9.386 7.862 10.907.575.105.786-.25.786-.556 0-.274-.01-1.002-.015-1.966-3.198.695-3.873-1.54-3.873-1.54-.523-1.33-1.277-1.684-1.277-1.684-1.044-.714.08-.699.08-.699 1.155.081 1.763 1.186 1.763 1.186 1.027 1.76 2.695 1.252 3.35.957.104-.744.402-1.252.732-1.54-2.552-.29-5.236-1.276-5.236-5.681 0-1.255.448-2.282 1.184-3.087-.118-.29-.513-1.46.112-3.045 0 0 .965-.309 3.163 1.18a10.99 10.99 0 012.88-.387c.977.004 1.962.132 2.88.387 2.197-1.489 3.161-1.18 3.161-1.18.626 1.585.231 2.755.114 3.045.737.805 1.183 1.832 1.183 3.087 0 4.416-2.688 5.388-5.252 5.673.414.356.783 1.062.783 2.141 0 1.547-.014 2.795-.014 3.175 0 .309.209.667.792.554C20.71 21.382 24 17.083 24 12c0-6.352-5.148-11.5-12-11.5z"/>
       </svg>
       GitHub
+    </a>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=mohit.gyanchandani09@gmail.com" class="social reveal" target="_blank" style="animation-delay: 0.6s;">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+      </svg>
+      Email
     </a>
   </div>
 

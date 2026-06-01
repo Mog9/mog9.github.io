@@ -2,30 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Distilling Knowledge</title>
+  <title>Blog Post</title>
 
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #1e1e26;
-      --panel: #1b1b22;
-      --text: #ffb86c;
-      --muted: #c9a26b;
-      --border: #ffb86c;
+      --bg: #f5f0e8;
+      --panel: #f5f0e8;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --border: #d1ccc4;
     }
 
-    [data-theme="light"] {
-      --bg: #f4f4f4;
-      --panel: #ffffff;
-      --text: #1e1e26;
-      --muted: #555555;
-      --border: #1e1e26;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -35,22 +25,19 @@
       color: var(--text);
       display: flex;
       justify-content: center;
-      align-items: center;
     }
 
-    /* FRAME */
     .frame {
       width: 94%;
       max-width: 1200px;
       min-height: 90vh;
-      border: 2px solid var(--border);
+      border: 1px solid var(--border);
       padding: 28px 32px;
       display: flex;
       flex-direction: column;
       background: var(--panel);
     }
 
-    /* NAV */
     .nav {
       display: flex;
       justify-content: space-between;
@@ -61,30 +48,13 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 2px solid var(--border);
       cursor: pointer;
     }
 
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 13px;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-
-    .theme-toggle:hover {
-      background: var(--text);
-      color: var(--panel);
-    }
-
-    /* ARTICLE LAYOUT */
     .article {
       margin: 40px auto;
       width: 100%;
-      max-width: 720px; /* reading width */
+      max-width: 720px;
     }
 
     .article-title {
@@ -102,7 +72,6 @@
       margin-bottom: 40px;
     }
 
-    /* TYPOGRAPHY */
     .article p {
       font-size: 15px;
       line-height: 1.7;
@@ -120,13 +89,13 @@
     }
 
     .article code {
-      background: rgba(255, 184, 108, 0.12);
+      background: rgba(0, 0, 0, 0.06);
       padding: 2px 6px;
       font-size: 14px;
     }
 
     .article pre {
-      background: rgba(255, 184, 108, 0.08);
+      background: rgba(0, 0, 0, 0.04);
       padding: 16px;
       overflow-x: auto;
       margin: 24px 0;
@@ -137,7 +106,6 @@
       padding: 0;
     }
 
-    /* ANIMATIONS */
     .reveal {
       opacity: 0;
       transform: translateY(10px);
@@ -145,78 +113,49 @@
     }
 
     @keyframes revealUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .fade-out {
-      opacity: 0;
-      transition: opacity 0.25s ease-out;
-    }
-
-    .toggle-animate {
-      animation: togglePulse 0.2s ease-out;
-    }
-
-    @keyframes togglePulse {
-      50% {
-        transform: scale(0.96);
-        opacity: 0.8;
-      }
-    }
+    .fade-out { opacity: 0; transition: opacity 0.25s ease-out; }
 
     figure {
-    margin: 32px 0;
-    text-align: center;
+      margin: 32px 0;
+      text-align: center;
     }
 
     .figure img {
-    max-width: 100%;
-    border: 1px solid var(--border);
+      max-width: 100%;
+      border: 1px solid var(--border);
     }
 
-    /* Size variants */
-    .figure.small img {
-    max-width: 360px;
-    }
+    .figure.small img { max-width: 360px; }
+    .figure.medium img { max-width: 520px; }
+    .figure.large img { max-width: 720px; }
 
-    .figure.medium img {
-    max-width: 520px;
-    }
-
-    .figure.large img {
-    max-width: 720px;
-    }
-
-    /* Caption */
     .figure figcaption {
-    margin-top: 8px;
-    font-size: 12px;
-    color: var(--muted);
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
     }
 
-    /* BACK LINK */
     .back-container {
-    margin-top: 64px;
-    text-align: center;
+      margin-top: 64px;
+      text-align: center;
     }
 
     .back-link {
-    font-size: 13px;
-    color: var(--muted);
-    text-decoration: none;
-    border: 1px solid var(--border);
-    padding: 8px 14px;
-    display: inline-block;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      display: inline-block;
     }
 
     .back-link:hover {
-    background: var(--text);
-    color: var(--panel);
+      background: var(--text);
+      color: var(--panel);
     }
-
   </style>
 </head>
 
@@ -224,83 +163,31 @@
 
 <div class="frame">
 
-  <!-- NAV -->
   <div class="nav">
     <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
       <img src="/pic.jpg" alt="home">
     </a>
-
     <div></div>
-
-    <div class="reveal" style="animation-delay: 0.15s;">
-      <button class="theme-toggle" onclick="toggleTheme()">dark</button>
-    </div>
   </div>
 
-  <!-- ARTICLE -->
   <article class="article">
 
     <h1 class="article-title reveal" style="animation-delay: 0.2s;">
-      Distilling Knowledge in a Neural Network
+      Blog Post Title
     </h1>
 
     <div class="article-meta reveal" style="animation-delay: 0.25s;">
-      19 Dec 2025
+      Date
     </div>
 
     <div class="reveal" style="animation-delay: 0.3s;">
       <p>
-        This is where your writing starts. Treat this like a paper, not a tweet.
-        Slow down. Explain assumptions. Build intuition.
-      </p>
-
-      <p>
-        Vision models are often described in terms of architectures, but what
-        matters more early on is understanding what problem they are actually
-        solving.
-      </p>
-
-      <figure class="figure medium">
-        <img src="/pic.jpg" alt="medium image">
-        <figcaption>
-            Figure 1: Example of a convolution kernel applied to an image.
-        </figcaption>
-        </figure>
-
-        <figure class="figure small">
-        <img src="/pic.jpg" alt="small image">
-        </figure>
-
-        <figure class="figure large">
-        <img src="/pic.jpg" alt="large image">
-        <figcaption>
-            Model architecture overview.
-        </figcaption>
-        </figure>
-
-
-      <h2>
-        First principles
-      </h2>
-
-      <p>
-        At a fundamental level, an image is just a grid of numbers. The model’s
-        job is not to “see”, but to learn useful transformations of that grid.
-      </p>
-
-      <pre><code>
-        # example code block
-        import torch
-        x = torch.randn(1, 3, 224, 224)
-      </code></pre>
-
-      <p>
-        The rest of the article continues here.
+        Write your content here.
       </p>
     </div>
 
     <div class="back-container reveal" style="animation-delay: 0.4s;">
-    <a href="blog.html" class="back-link">
+    <a href="../blog.html" class="back-link">
         ← back to blogs
     </a>
     </div>
@@ -310,23 +197,6 @@
 </div>
 
 <script>
-  function toggleTheme() {
-    const body = document.body;
-    const btn = document.querySelector(".theme-toggle");
-
-    btn.classList.remove("toggle-animate");
-    void btn.offsetWidth;
-    btn.classList.add("toggle-animate");
-
-    if (body.getAttribute("data-theme") === "light") {
-      body.removeAttribute("data-theme");
-      btn.textContent = "dark";
-    } else {
-      body.setAttribute("data-theme", "light");
-      btn.textContent = "light";
-    }
-  }
-
   document.querySelectorAll("a").forEach(link => {
     const href = link.getAttribute("href");
     if (!href || href.startsWith("#")) return;
@@ -334,10 +204,7 @@
     link.addEventListener("click", e => {
       e.preventDefault();
       document.body.classList.add("fade-out");
-
-      setTimeout(() => {
-        window.location.href = href;
-      }, 200);
+      setTimeout(() => { window.location.href = href; }, 200);
     });
   });
 </script>

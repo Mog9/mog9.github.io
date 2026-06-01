@@ -8,19 +8,11 @@
 
   <style>
     :root {
-      --bg: #1e1e26;
-      --panel: #1b1b22;
-      --text: #ffb86c;
-      --muted: #c9a26b;
-      --border: #ffb86c;
-    }
-
-    [data-theme="light"] {
-      --bg: #f4f4f4;
-      --panel: #ffffff;
-      --text: #1e1e26;
-      --muted: #555555;
-      --border: #1e1e26;
+      --bg: #f5f0e8;
+      --panel: #f5f0e8;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --border: #d1ccc4;
     }
 
     * {
@@ -35,7 +27,6 @@
       color: var(--text);
       display: flex;
       justify-content: center;
-      align-items: center;
     }
 
     /* FRAME */
@@ -43,7 +34,7 @@
       width: 94%;
       max-width: 1200px;
       min-height: 90vh;
-      border: 2px solid var(--border);
+      border: 1px solid var(--border);
       padding: 28px 32px;
       display: flex;
       flex-direction: column;
@@ -61,23 +52,7 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 2px solid var(--border);
       cursor: pointer;
-    }
-
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 13px;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-
-    .theme-toggle:hover {
-      background: var(--text);
-      color: var(--panel);
     }
 
     /* ARTICLE LAYOUT */
@@ -120,13 +95,13 @@
     }
 
     .article code {
-      background: rgba(255, 184, 108, 0.12);
+      background: rgba(0, 0, 0, 0.06);
       padding: 2px 6px;
       font-size: 14px;
     }
 
     .article pre {
-      background: rgba(255, 184, 108, 0.08);
+      background: rgba(0, 0, 0, 0.04);
       padding: 16px;
       overflow-x: auto;
       margin: 24px 0;
@@ -154,17 +129,6 @@
     .fade-out {
       opacity: 0;
       transition: opacity 0.25s ease-out;
-    }
-
-    .toggle-animate {
-      animation: togglePulse 0.2s ease-out;
-    }
-
-    @keyframes togglePulse {
-      50% {
-        transform: scale(0.96);
-        opacity: 0.8;
-      }
     }
 
     figure {
@@ -231,10 +195,6 @@
     </a>
 
     <div></div>
-
-    <div class="reveal" style="animation-delay: 0.15s;">
-      <button class="theme-toggle" onclick="toggleTheme()">dark</button>
-    </div>
   </div>
 
   <!-- ARTICLE -->
@@ -439,23 +399,6 @@
 </div>
 
 <script>
-  function toggleTheme() {
-    const body = document.body;
-    const btn = document.querySelector(".theme-toggle");
-
-    btn.classList.remove("toggle-animate");
-    void btn.offsetWidth;
-    btn.classList.add("toggle-animate");
-
-    if (body.getAttribute("data-theme") === "light") {
-      body.removeAttribute("data-theme");
-      btn.textContent = "dark";
-    } else {
-      body.setAttribute("data-theme", "light");
-      btn.textContent = "light";
-    }
-  }
-
   document.querySelectorAll("a").forEach(link => {
     const href = link.getAttribute("href");
     if (!href || href.startsWith("#")) return;
@@ -468,6 +411,10 @@
         window.location.href = href;
       }, 200);
     });
+  });
+
+  window.addEventListener("pageshow", () => {
+    document.body.classList.remove("fade-out");
   });
 </script>
 

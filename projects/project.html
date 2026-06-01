@@ -4,22 +4,14 @@
   <meta charset="UTF-8" />
   <title>projects</title>
 
-  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #1e1e26;
-      --text: #ffb86c;
-      --muted: #c9a26b;
-      --border: #ffb86c;
-    }
-
-    [data-theme="light"] {
-      --bg: #f4f4f4;
-      --text: #1e1e26;
-      --muted: #555555;
-      --border: #1e1e26;
+      --bg: #f5f0e8;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --border: #d1ccc4;
     }
 
     * { box-sizing: border-box; }
@@ -33,7 +25,6 @@
       color: var(--text);
     }
 
-    /* Full page layout using grid rows */
     .page {
       height: 100vh;
       display: grid;
@@ -41,24 +32,22 @@
       overflow: hidden;
     }
 
-    /* NAV */
     .nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 20px 80px;
+      border-bottom: 1px solid var(--border);
     }
 
     .home-avatar img {
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 2px solid var(--border);
       cursor: pointer;
     }
     .home-avatar img:hover { opacity: 0.85; }
 
-    /* TITLE */
     .title {
       text-align: center;
       font-size: 54px;
@@ -67,7 +56,6 @@
       margin: 0 0 16px;
     }
 
-    /* SCROLLABLE GRID — fills remaining space exactly */
     .projects-scroll {
       overflow-y: auto;
       overflow-x: hidden;
@@ -76,7 +64,7 @@
     }
 
     .projects-scroll::-webkit-scrollbar { width: 6px; }
-    .projects-scroll::-webkit-scrollbar-thumb { background: rgba(255,184,108,0.4); }
+    .projects-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); }
     .projects-scroll::-webkit-scrollbar-track { background: transparent; }
 
     .projects-grid {
@@ -86,7 +74,7 @@
     }
 
     .project-card {
-      border: 1px solid rgba(255, 184, 108, 0.35);
+      border: 1px solid var(--border);
       padding: 18px 20px;
       background: transparent;
     }
@@ -107,16 +95,14 @@
     .project-github svg { width: 16px; height: 16px; fill: var(--muted); }
     .project-github:hover svg { fill: var(--text); }
 
-    /* BOTTOM BAR — WIP left, back pinned to very bottom center */
     .bottom-bar {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: end;
       padding: 12px 80px 28px;
       flex-shrink: 0;
+      border-top: 1px solid var(--border);
     }
-
-    .wip-container { max-width: 350px; }
 
     .back-link {
       font-size: 13px;
@@ -128,10 +114,6 @@
     }
     .back-link:hover { background: var(--text); color: var(--bg); }
 
-    .wip-card { border-style: dashed; }
-    .wip-text { margin-top: 6px; font-size: 12px; font-style: italic; color: var(--muted); }
-
-    /* ANIMATIONS */
     .reveal {
       opacity: 0;
       transform: translateY(10px);
@@ -139,14 +121,11 @@
     }
     @keyframes revealUp { to { opacity: 1; transform: translateY(0); } }
     .fade-out { opacity: 0; transition: opacity 0.25s ease-out; }
-    .toggle-animate { animation: togglePulse 0.2s ease-out; }
-    @keyframes togglePulse { 50% { opacity: 0.7; } }
 
     @media (max-width: 1100px) { .projects-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 768px) {
       .projects-grid { grid-template-columns: repeat(2, 1fr); }
       .nav, .projects-scroll, .bottom-bar { padding-left: 32px; padding-right: 32px; }
-      .wip-container { left: 32px; }
     }
     @media (max-width: 480px) { .projects-grid { grid-template-columns: 1fr; } }
   </style>
@@ -155,22 +134,6 @@
 <body>
 
 <script>
-  function toggleTheme() {
-    const body = document.body;
-    const btn = document.querySelector(".theme-toggle");
-    body.classList.remove("fade-out");
-    btn.classList.remove("toggle-animate");
-    void btn.offsetWidth;
-    btn.classList.add("toggle-animate");
-    if (body.getAttribute("data-theme") === "light") {
-      body.removeAttribute("data-theme");
-      btn.textContent = "dark";
-    } else {
-      body.setAttribute("data-theme", "light");
-      btn.textContent = "light";
-    }
-  }
-
   document.querySelectorAll("a").forEach(link => {
     link.addEventListener("click", e => {
       const href = link.getAttribute("href");
@@ -188,7 +151,6 @@
 
 <div class="page">
 
-  <!-- NAV -->
   <div class="nav">
     <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
       <img src="/pic.jpg" alt="home">
@@ -196,14 +158,11 @@
     <div></div>
   </div>
 
-  <!-- TITLE -->
   <div class="title reveal" style="animation-delay: 0.3s;">Projects</div>
 
-  <!-- SCROLLABLE PROJECTS -->
   <div class="projects-scroll reveal" style="animation-delay: 0.4s;">
     <div class="projects-grid">
 
-      <!-- GPT-2 CUDA Inference Engine -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-title">GPT-2 CUDA Inference Engine</div>
@@ -214,7 +173,6 @@
         <div class="project-desc">Complete GPT-2 transformer inference engine from scratch in CUDA with custom tiled GEMM, fused attention, LayerNorm, KV cache, and autoregressive generation — ~190 tok/s on RTX 3050, profiled with Nsight Compute.</div>
       </div>
 
-      <!-- tri-sds -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-title">tri-sds</div>
@@ -225,7 +183,6 @@
         <div class="project-desc">EAGLE-style speculative decoding engine in Triton for Qwen3-4B→Qwen3-32B on AMD MI300X (ROCm 7.2). Custom prefill, GQA decode, and EAGLE draft attention kernels — 2.5× wall-clock speedup.</div>
       </div>
 
-      <!-- Adaptive-ViT -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-title">Adaptive-ViT</div>
@@ -236,7 +193,6 @@
         <div class="project-desc">An adaptive Vision Transformer inference system that avoids unnecessary high-resolution computation, achieving ~3× faster inference than static high-res ViT by selectively escalating only when needed.</div>
       </div>
 
-      <!-- Pluto -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-title">Pluto</div>
@@ -250,7 +206,6 @@
         </div>
       </div>
 
-      <!-- VecEngine -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-title">VecEngine</div>
@@ -261,7 +216,6 @@
         <div class="project-desc">A lightweight vector database, retrieval engine, and custom indexer, all built completely from scratch.</div>
       </div>
 
-      <!-- customGPT-RAG -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-title">customGPT-RAG</div>
@@ -272,29 +226,6 @@
         <div class="project-desc">custom RAG system that uses local document embeddings and generative AI to provide accurate, context-aware answers from private knowledge.</div>
       </div>
 
-      <!-- FlashAttention-CuPy -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-title">FlashAttention-CuPy</div>
-          <a href="https://github.com/Mog9/FlashAttention-CuPy" target="_blank" class="project-github">
-            <svg viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.16 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.79.55C20.71 21.38 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/></svg>
-          </a>
-        </div>
-        <div class="project-desc">Flash Attention from scratch, tiled CUDA forward kernel, online softmax with running max and correction factor, recomputation trick in backward, O(N) memory, full forward and backward verified against PyTorch autograd to 1e-6.</div>
-      </div>
-
-      <!-- Kernel Fusion -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-title">Kernel-Fusion</div>
-          <a href="https://github.com/Mog9/kernel-fusion" target="_blank" class="project-github">
-            <svg viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.79-.25.79-.56v-1.97c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.02 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.16 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.79.55C20.71 21.38 24 17.08 24 12 24 5.65 18.85.5 12 .5z"/></svg>
-          </a>
-        </div>
-        <div class="project-desc">Fused ReLU + LayerNorm into a single CUDA RawKernel which is 5.8x faster than running them separately, a CUDA Python experiment demonstrating kernel fusion by combining ReLU and LayerNorm into a single GPU pass.</div>
-      </div>
-
-      <!-- Autograd-NN -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-title">Autograd-NN</div>
@@ -305,7 +236,6 @@
         <div class="project-desc">Implemented a fully connected autograd engine and neural network from scratch in pure Python.</div>
       </div>
 
-      <!-- micrograd-in-cpp -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-title">micrograd-in-cpp</div>
@@ -319,13 +249,12 @@
     </div>
   </div>
 
-  <!-- BOTTOM BAR -->
   <div class="bottom-bar reveal" style="animation-delay: 0.5s;">
     <div></div>
     <a href="/index.html" class="back-link">← back</a>
     <div></div>
   </div>
-  </div><!-- end .page -->
+  </div>
 
 </body>
 </html>
