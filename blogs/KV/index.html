@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>KV Cache Compression with TurboQuant and KIVI</title>
+  <link rel="icon" href="/pic.jpg" type="image/jpeg">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --panel: #f5f0e8;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --border: #d1ccc4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: "JetBrains Mono", monospace;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+    }
+
+    .frame {
+      width: 94%;
+      max-width: 1200px;
+      min-height: 90vh;
+      border: 1px solid var(--border);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .home-avatar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .article {
+      margin: 40px auto;
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .article-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    .article-meta {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    .article p {
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .article h2 {
+      font-size: 22px;
+      margin: 48px 0 16px;
+    }
+
+    .article h3 {
+      font-size: 18px;
+      margin: 32px 0 12px;
+    }
+
+    .article code {
+      background: rgba(0, 0, 0, 0.06);
+      padding: 2px 6px;
+      font-size: 14px;
+    }
+
+    .article pre {
+      background: rgba(0, 0, 0, 0.04);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 24px 0;
+    }
+
+    .article pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: revealUp 0.6s ease-out forwards;
+    }
+
+    @keyframes revealUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-out { opacity: 0; transition: opacity 0.25s ease-out; }
+
+    figure {
+      margin: 32px 0;
+      text-align: center;
+    }
+
+    .figure img {
+      max-width: 100%;
+      border: 1px solid var(--border);
+    }
+
+    .figure.small img { max-width: 360px; }
+    .figure.medium img { max-width: 520px; }
+    .figure.large img { max-width: 720px; }
+
+    .figure figcaption {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .back-container {
+      margin-top: 64px;
+      text-align: center;
+    }
+
+    .back-link {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      display: inline-block;
+    }
+
+    .back-link:hover {
+      background: var(--text);
+      color: var(--panel);
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="frame">
+
+  <div class="nav">
+    <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
+      <img src="/pic.jpg" alt="home">
+    </a>
+    <div></div>
+  </div>
+
+  <article class="article">
+
+    <h1 class="article-title reveal" style="animation-delay: 0.2s;">
+      KV Cache Compression with TurboQuant and KIVI
+    </h1>
+
+    <div class="article-meta reveal" style="animation-delay: 0.25s;">
+      June 9, 2026
+    </div>
+
+    <p class="reveal" style="animation-delay: 0.3s;">
+      I was reading and working on a project related to KV cache compression recently, and while going through different papers and implementations I thought it would be nice to make a small writeup on two really interesting approaches here, KIVI and TurboQuant. Both of them try to solve the same problem in different ways, which is reducing KV cache memory usage without hurting model quality or inference speed too much.
+    </p>
+
+    <p class="reveal" style="animation-delay: 0.35s;">
+      Every generated token adds new keys and values into memory, and at very large sequence lengths the KV cache can actually take more memory than the model weights themselves. On top of that, attention becomes heavily memory bandwidth bound because the GPU constantly has to read massive amounts of KV data during decoding. This is what pushed researchers toward KV cache compression and quantization.
+    </p>
+
+    <h2>KIVI: Asymmetric 2-bit Quantization</h2>
+
+    <p>
+      Talking about KIVI, which showed that you could compress the KV cache down to just 2 bits while keeping model quality almost unchanged. The important insight from KIVI was that keys and values behave very differently statistically. Keys tend to contain persistent outlier channels that stay important across many tokens, while values are much more dynamic and vary token by token. Because of this, KIVI used asymmetric quantization: keys were quantized per-channel while values were quantized per-token. Instead of forcing the same quantization strategy onto both tensors, it adapted to the actual structure of the data.
+    </p>
+
+    <p>
+      During inference, newly generated keys and values are first separated into different quantization paths. For keys, KIVI performs per-channel quantization because some channels consistently contain large magnitude outliers that are important for attention. Each channel gets its own scaling factor, and the key tensor is then compressed into 2-bit representations using those scales. Values are handled differently. Since values vary more dynamically across tokens instead of channels, KIVI applies per-token quantization where each token gets its own scale during compression.
+    </p>
+
+    <p>
+      During attention computation, the quantized KV cache stays compressed in memory and is only dequantized when required for the actual matrix multiplications. Mathematically, the quantization step is basically approximating the original tensor <code>x</code> as <code>x_q = round(x / s)</code>, where <code>s</code> is the scaling factor chosen either per-channel or per-token depending on whether it is a key or value tensor. This lets KIVI drastically reduce memory usage and bandwidth while still preserving the attention information that matters most.
+    </p>
+
+    <figure class="figure large">
+      <img src="img1.png" alt="KIVI quantization diagram">
+    </figure>
+
+    <p>
+      KIVI achieved around a 10x KV cache memory reduction compared to FP16 storage while keeping perplexity and downstream performance very close to the original model. More importantly, it proved that ultra low precision KV cache storage was actually practical. Before KIVI, most people assumed quantizing the KV cache that aggressively would destroy attention quality, especially for long context generation.
+    </p>
+
+    <h2>TurboQuant: Systems-Optimized Compression</h2>
+
+    <p>
+      After that, TurboQuant pushed the idea further by focusing not just on compression, but on end-to-end inference efficiency. A lot of earlier KV quantization methods reduced memory usage but introduced hidden costs during attention computation because they required expensive dequantization or awkward memory layouts. TurboQuant approached the problem more like a systems optimization problem instead of just a quantization problem.
+    </p>
+
+    <p>
+      Instead of treating the KV cache as FP16 tensors that later get compressed, TurboQuant redesigns how the KV cache is represented and accessed during attention itself. The main goal is to reduce memory bandwidth pressure during inference while still keeping the attention computation accurate. Since modern LLM inference is heavily memory bound, reducing KV cache traffic can significantly improve throughput and scalability, especially at very long context lengths.
+    </p>
+
+    <p>
+      TurboQuant uses ultra low precision KV representations along with efficient scaling and memory layout strategies that preserve the information attention depends on most. Unlike many earlier KV quantization methods, TurboQuant focuses on keeping the compressed cache usable directly inside the attention pipeline instead of constantly reconstructing large FP16 tensors. This avoids large dequantization overheads and reduces unnecessary memory movement across the GPU.
+    </p>
+
+    <p>
+      The actual TurboQuant pipeline works more like a systems optimization pipeline than a simple quantization layer. During inference, newly generated keys and values are quantized before being appended into the KV cache, and lightweight scaling metadata is stored alongside the compressed representations. Mathematically, the quantization step can still be approximated as <code>x_q = round(x / s)</code>, where <code>s</code> represents the scaling factor for a group, channel, or block depending on the chosen layout strategy. During attention computation, the KV cache stays compressed for as long as possible, with fused dequantization happening directly inside the attention kernel itself.
+    </p>
+
+    <figure class="figure large">
+      <img src="img2.png" alt="TurboQuant pipeline diagram">
+    </figure>
+
+    <p>
+      Methods like KIVI and TurboQuant are becoming increasingly important and I wanted to share a quick blog on it on how we can aggressively compress the KV cache without hurting generation quality. These systems unlock longer contexts, larger batch sizes, lower inference costs, and much better GPU utilization.
+    </p>
+
+    <p>
+      Since I have a good amount of GPU available, I'll try my best to show a proper implementation of KV cache compression soon, maybe even benchmarking different approaches and seeing how close they actually get to FP16 quality and throughput in practice. I also saw a discussion where using NVFP4 instead of FP8 for KV cache storage reported surprisingly small accuracy drops while fitting around 1.78x more KV cache in memory. Haven't tested it myself yet, something I definitely want to experiment with and benchmark properly too. Stay tuned, thanks for reading.
+    </p>
+
+    <div class="back-container reveal" style="animation-delay: 0.4s;">
+      <a href="/blogs/blog.html" class="back-link">
+        ← back to blogs
+      </a>
+    </div>
+
+  </article>
+
+</div>
+
+<script>
+  document.querySelectorAll("a").forEach(link => {
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#")) return;
+
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      document.body.classList.add("fade-out");
+      setTimeout(() => { window.location.href = href; }, 200);
+    });
+  });
+
+  window.addEventListener("pageshow", () => {
+    document.body.classList.remove("fade-out");
+  });
+</script>
+
+</body>
+</html>
