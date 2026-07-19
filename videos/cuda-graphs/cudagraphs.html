@@ -91,8 +91,12 @@
     .part-card:hover:not(.coming-soon) { border-color: var(--text); }
 
     .part-card.coming-soon {
-      opacity: 0.5;
       cursor: default;
+    }
+
+    .part-card.coming-soon .part-thumb,
+    .part-card.coming-soon .part-info {
+      opacity: 0.5;
     }
 
     .part-thumb {
