@@ -38,6 +38,7 @@
       align-items: center;
       padding: 20px 80px;
       border-bottom: 1px solid var(--border);
+      position: relative;
     }
 
     .home-avatar img {
@@ -47,6 +48,18 @@
       cursor: pointer;
     }
     .home-avatar img:hover { opacity: 0.85; }
+
+    .nav-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 28px;
+      font-size: 16px;
+    }
+
+    .nav-center a { color: var(--text); text-decoration: none; }
+    .nav-center a:hover { text-decoration: underline; }
 
     .title {
       text-align: center;
@@ -156,7 +169,11 @@
     <a href="/index.html" class="home-avatar reveal" style="animation-delay: 0.1s;">
       <img src="/pic.jpg" alt="home">
     </a>
-    <div></div>
+    <div class="nav-center">
+      <a href="/blogs/blog.html">blogs</a>
+      <a href="/projects/project.html">projects</a>
+      <a href="/videos/videos.html">videos</a>
+    </div>
   </div>
 
   <div class="title reveal" style="animation-delay: 0.3s;">Projects</div>
