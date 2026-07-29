@@ -63,39 +63,75 @@
       overflow-y: auto;
     }
 
-    .parts-bar {
-      display: flex;
-      gap: 10px;
+    .video-title {
+      font-size: 24px;
+      font-weight: 600;
       margin-bottom: 24px;
-      flex-wrap: wrap;
-      justify-content: center;
+      text-align: center;
+      max-width: 1000px;
     }
 
-    .part-btn {
-      font-size: 14px;
-      color: var(--muted);
-      text-decoration: none;
-      padding: 8px 20px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-family: "JetBrains Mono", monospace;
-      background: transparent;
-      cursor: pointer;
-      transition: all 0.2s;
+    .video-section {
+      display: flex;
+      gap: 24px;
+      max-width: 1000px;
+      width: 100%;
+      margin-bottom: 32px;
     }
-
-    .part-btn:hover { border-color: var(--text); color: var(--text); }
-    .part-btn.active { border-color: var(--text); color: var(--text); background: rgba(0,0,0,0.04); }
 
     .video-player {
-      width: 100%;
-      max-width: 800px;
+      flex: 1;
       aspect-ratio: 16 / 9;
       border: 1px solid var(--border);
       border-radius: 8px;
       overflow: hidden;
       background: #000;
-      margin-bottom: 24px;
+    }
+
+    .parts-sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .parts-sidebar-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .part-link {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      line-height: 1.4;
+    }
+
+    .part-link:hover {
+      background: rgba(0,0,0,0.04);
+      color: var(--text);
+    }
+
+    .part-link.active {
+      background: rgba(0,0,0,0.04);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .part-link.coming-soon {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .video-player video {
@@ -237,18 +273,22 @@
 
   <div class="content">
 
-    <div class="parts-bar reveal" style="animation-delay: 0.5s;">
-      <a href="torch-compile-part1.html" class="part-btn">Part 1: Why LLM Inference Frameworks Use torch.compile</a>
-      <button class="part-btn active">Part 2: How Does PyTorch Compile Regular Python Code?</button>
-      <span class="part-btn" style="opacity: 0.5; cursor: not-allowed;">Part 3: coming soon</span>
-      <span class="part-btn" style="opacity: 0.5; cursor: not-allowed;">Part 4: coming soon</span>
-      <span class="part-btn" style="opacity: 0.5; cursor: not-allowed;">Part 5: coming soon</span>
-    </div>
+    <div class="video-title reveal" style="animation-delay: 0.5s;">How Does PyTorch Compile Regular Python Code?</div>
 
-    <div class="video-player reveal" style="animation-delay: 0.6s;">
-      <video controls poster="thumb2.png">
-        <source src="part2.mp4" type="video/mp4">
-      </video>
+    <div class="video-section reveal" style="animation-delay: 0.6s;">
+      <div class="video-player">
+        <video controls poster="thumb2.png">
+          <source src="part2.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="parts-sidebar">
+        <div class="parts-sidebar-title">Parts</div>
+        <a href="torch-compile-part1.html" class="part-link">Part 1: Why LLM Inference Frameworks Use torch.compile</a>
+        <span class="part-link active">Part 2: How Does PyTorch Compile Regular Python Code?</span>
+        <span class="part-link coming-soon">Part 3: coming soon</span>
+        <span class="part-link coming-soon">Part 4: coming soon</span>
+        <span class="part-link coming-soon">Part 5: coming soon</span>
+      </div>
     </div>
 
     <div class="topics-section reveal" style="animation-delay: 0.7s;">
