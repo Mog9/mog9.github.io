@@ -61,6 +61,7 @@
       align-items: center;
       padding: 32px 80px 20px;
       overflow-y: auto;
+      position: relative;
     }
 
     .video-title {
@@ -68,29 +69,25 @@
       font-weight: 600;
       margin-bottom: 24px;
       text-align: center;
-      max-width: 1000px;
-    }
-
-    .video-section {
-      display: flex;
-      gap: 24px;
-      max-width: 1000px;
-      width: 100%;
-      margin-bottom: 32px;
+      max-width: 800px;
     }
 
     .video-player {
-      flex: 1;
+      width: 100%;
+      max-width: 800px;
       aspect-ratio: 16 / 9;
       border: 1px solid var(--border);
       border-radius: 8px;
       overflow: hidden;
       background: #000;
+      margin-bottom: 32px;
     }
 
     .parts-sidebar {
+      position: absolute;
+      top: 100px;
+      right: 80px;
       width: 280px;
-      flex-shrink: 0;
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 16px;
@@ -275,20 +272,19 @@
 
     <div class="video-title reveal" style="animation-delay: 0.5s;">How Does PyTorch Compile Regular Python Code?</div>
 
-    <div class="video-section reveal" style="animation-delay: 0.6s;">
-      <div class="video-player">
-        <video controls poster="thumb2.png">
-          <source src="part2.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="parts-sidebar">
-        <div class="parts-sidebar-title">Parts</div>
-        <a href="torch-compile-part1.html" class="part-link">Part 1: Why LLM Inference Frameworks Use torch.compile</a>
-        <span class="part-link active">Part 2: How Does PyTorch Compile Regular Python Code?</span>
-        <span class="part-link coming-soon">Part 3: coming soon</span>
-        <span class="part-link coming-soon">Part 4: coming soon</span>
-        <span class="part-link coming-soon">Part 5: coming soon</span>
-      </div>
+    <div class="video-player reveal" style="animation-delay: 0.6s;">
+      <video controls poster="thumb2.png">
+        <source src="part2.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="parts-sidebar reveal" style="animation-delay: 0.7s;">
+      <div class="parts-sidebar-title">Parts</div>
+      <a href="torch-compile-part1.html" class="part-link">Part 1: Why LLM Inference Frameworks Use torch.compile</a>
+      <span class="part-link active">Part 2: How Does PyTorch Compile Regular Python Code?</span>
+      <span class="part-link coming-soon">Part 3: coming soon</span>
+      <span class="part-link coming-soon">Part 4: coming soon</span>
+      <span class="part-link coming-soon">Part 5: coming soon</span>
     </div>
 
     <div class="topics-section reveal" style="animation-delay: 0.7s;">
